@@ -46,7 +46,7 @@ An invitation, itinerary, and RSVP site for a family road trip celebrating Bri's
    - UI: list of RSVPs with a tap to set status (Interested / Checking coins / Coming / Locked in / Paid in full) and a quick "+ payment" amount field that adds to `amount_paid`. Show totals: collected so far vs. expected (paying heads × per-person share), and who's behind on each due date.
    - Optional: a `bri21_payments` ledger table (rsvp_id, amount, method, note, created_at) with `amount_paid` kept as a sum. Use it only if it stays simple.
 6. **House photos:** Vrbo images are hotlinked and may break. Ask Dani for 4–5 saved photos (pool, living room, game room, a themed bedroom). Put them in `/images/house/` and point `HOUSE_PHOTOS` at them.
-7. **Link previews:** DONE: `og.jpg` is Dani's flyer (1000×1000, kept under 300KB so WhatsApp shows it). family will share this by text, so add Open Graph and Twitter meta tags with a 1200×630 `og.jpg`. Generate it in the site's style (chrome "BRI'S 21st", neon, date line) and include Bri's photo only if Dani approves.
+7. **Link previews:** DONE: `og-flyer.jpg` (renamed so cached previews refresh) is Dani's flyer (1000×1000, kept under 300KB so WhatsApp shows it). family will share this by text, so add Open Graph and Twitter meta tags with a 1200×630 `og.jpg`. Generate it in the site's style (chrome "BRI'S 21st", neon, date line) and include Bri's photo only if Dani approves.
 
 ### P2: Nice to have
 8. Supabase Realtime instead of polling on the RSVP list.
