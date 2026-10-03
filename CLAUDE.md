@@ -22,7 +22,7 @@ An invitation, itinerary, and RSVP site for a family road trip celebrating Bri's
 ## Hard guardrails
 1. **The Supabase project is SHARED** with Dani's other live apps (Snaplist, Bri's booking app, KJ's DJ app). Only create or alter objects prefixed `bri21_`. **Never modify, drop, or migrate any other table, policy, function, bucket, or auth setting.** Read-only inspection is fine.
 2. The anon key is public by design. Never put the service role key in client code or commit it.
-3. No payment processing in the site (no Stripe checkout). Payments go by Zelle or Cash App outside the site, and Dani logs them.
+3. No payment processing in the site (no Stripe checkout). Payments go by Cash App (`$bri21celebration`) outside the site. No Zelle. Dani logs them.
 4. Don't invent prices or facts. Values marked as estimates stay estimates until Dani gives real numbers.
 
 ## Tasks (in order)
@@ -46,7 +46,7 @@ An invitation, itinerary, and RSVP site for a family road trip celebrating Bri's
    - UI: list of RSVPs with a tap to set status (Interested / Checking coins / Coming / Locked in / Paid in full) and a quick "+ payment" amount field that adds to `amount_paid`. Show totals: collected so far vs. expected (paying heads × per-person share), and who's behind on each due date.
    - Optional: a `bri21_payments` ledger table (rsvp_id, amount, method, note, created_at) with `amount_paid` kept as a sum. Use it only if it stays simple.
 6. **House photos:** Vrbo images are hotlinked and may break. Ask Dani for 4–5 saved photos (pool, living room, game room, a themed bedroom). Put them in `/images/house/` and point `HOUSE_PHOTOS` at them.
-7. **Link previews:** family will share this by text, so add Open Graph and Twitter meta tags with a 1200×630 `og.jpg`. Generate it in the site's style (chrome "BRI'S 21st", neon, date line) and include Bri's photo only if Dani approves.
+7. **Link previews:** DONE: `og.jpg` is rendered from `og-template.html` (fonts must load before the screenshot). family will share this by text, so add Open Graph and Twitter meta tags with a 1200×630 `og.jpg`. Generate it in the site's style (chrome "BRI'S 21st", neon, date line) and include Bri's photo only if Dani approves.
 
 ### P2: Nice to have
 8. Supabase Realtime instead of polling on the RSVP list.
@@ -73,6 +73,10 @@ An invitation, itinerary, and RSVP site for a family road trip celebrating Bri's
   - The rest of the van share, due Jan 10, 2027
   - Memo line: "BRI21 + your name"
   - Deposits are nonrefundable once the house is booked; people can transfer their spot.
+- **Departure:** Thu Feb 4, 2027, around 8–9pm Central (countdown targets 8pm).
+- **Gifts:** "can't make it" gifts go toward the trip, not to Bri. People who want to gift Bri personally contact her directly.
+- **House photos:** Dani wants them hotlinked from the Vrbo listing (decided Oct 2026). Broken images already hide themselves.
+- **Admin:** `/admin.html`, magic link for danielle.washington21@gmail.com only. Policies are the ADMIN block in `schema.sql`.
 - **RSVP statuses:** `thinking` (Interested), `coins` (Checking coins), `pending` (Coming), and `gift` (Sending love: can't make it, sending a gift) can be set by the public. `in` (Locked in) and `paid` (Paid in full) are set by Dani only. `gift` rows are never riders and never count toward the van split.
 - **Cash App:** `$bri21celebration`. Trip memo `BRI21 + your name`; gift memo `BRI21 GIFT + your name`.
 

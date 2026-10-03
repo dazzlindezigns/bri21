@@ -43,3 +43,22 @@ grant insert (name, guests, kids, status, note) on public.bri21_rsvps to anon;
 -- drop policy if exists "bri21 rsvp" on public.bri21_rsvps;
 -- create policy "bri21 rsvp" on public.bri21_rsvps for insert to anon
 --   with check (status in ('thinking','coins','pending','gift'));
+
+-- ============================================================
+-- ADMIN (/admin.html). Only Dani's login can read payments or change rows.
+-- Everything here is scoped to bri21_rsvps. Safe to re-run.
+-- ============================================================
+grant select on public.bri21_rsvps to authenticated;
+grant update (status, amount_paid) on public.bri21_rsvps to authenticated;
+grant delete on public.bri21_rsvps to authenticated;
+
+drop policy if exists "bri21 admin read"   on public.bri21_rsvps;
+drop policy if exists "bri21 admin update" on public.bri21_rsvps;
+drop policy if exists "bri21 admin delete" on public.bri21_rsvps;
+create policy "bri21 admin read" on public.bri21_rsvps for select to authenticated
+  using (lower(auth.jwt()->>'email') = 'danielle.washington21@gmail.com');
+create policy "bri21 admin update" on public.bri21_rsvps for update to authenticated
+  using (lower(auth.jwt()->>'email') = 'danielle.washington21@gmail.com')
+  with check (lower(auth.jwt()->>'email') = 'danielle.washington21@gmail.com' and amount_paid >= 0);
+create policy "bri21 admin delete" on public.bri21_rsvps for delete to authenticated
+  using (lower(auth.jwt()->>'email') = 'danielle.washington21@gmail.com');

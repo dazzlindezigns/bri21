@@ -4,7 +4,7 @@
    ============================================================ */
 const CONFIG = {
   signature: "Dani",
-  departure: "2027-02-04T19:00:00-06:00",   // countdown target (Austin time)
+  departure: "2027-02-04T20:00:00-06:00",   // countdown target (Austin time). Rolling out around 8 or 9pm
   vrboUrl: "https://www.vrbo.com/5425883",
   ticketsUrl: "https://disneyworld.disney.go.com/admission/tickets/",
   housePerPerson: 150,                      // flat, ages 9+
@@ -18,11 +18,11 @@ const CONFIG = {
     { what: "The rest of your van share", amount: "vanHalf", due: "Jan 10, 2027", note: "Paid in full. Then you just pack." }
   ],
   pay: [
-    { label: "Zelle (preferred)", value: "[add your Zelle phone or email]" },
     { label: "Cash App", value: "$bri21celebration" }
   ],
   memo: "BRI21 + your name",
-  giftMemo: "BRI21 GIFT + your name",       // for "can't make it" gifts, so they don't get mixed up with trip shares
+  giftMemo: "BRI21 GIFT + your name",       // "can't make it" gifts go toward the trip; memo keeps them separate from people's shares
+  adminEmail: "danielle.washington21@gmail.com", // only this login can open /admin.html (enforced by Supabase policies, not just this line)
   policy: "Deposits aren't refundable once the house is booked, because that money is already spent. If you can't make it, you can hand your spot to someone else and settle up with them.",
   supabase: {
     url: "https://kpgvrntpigvtgyrzmfba.supabase.co",

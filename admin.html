@@ -1,0 +1,422 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>Bri's 21 | Payment log</title>
+<meta name="theme-color" content="#170B14">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💸</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Bricolage+Grotesque:opsz,wght@12..96,300..700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --night:#170B14; --panel:#26131F; --panel-2:#311827;
+  --neon:#FF3EA5; --neon-soft:#FF8FCD; --paper:#FCE3EE;
+  --ink:#F6EEF3; --muted:#C2B6BF; --line:rgba(255,62,165,.28); --dark-ink:#2B1A24;
+  --ok:#7EE2A8; --warn:#FFC857; --bad:#FF6B81;
+  --display:"Anton","Impact","Arial Narrow Bold",sans-serif;
+  --body:"Bricolage Grotesque",ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+body{margin:0;background:var(--night);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.45;-webkit-font-smoothing:antialiased;
+  background-image:radial-gradient(900px 500px at 90% -10%,rgba(255,62,165,.2),transparent 60%);background-attachment:fixed;
+  padding:env(safe-area-inset-top,0px) 0 calc(env(safe-area-inset-bottom,0px) + 90px)}
+:focus-visible{outline:3px solid var(--neon);outline-offset:2px;border-radius:6px}
+button,input{font:inherit;color:inherit}
+button{cursor:pointer}
+.wrap{max-width:720px;margin:0 auto;padding:0 16px}
+[hidden]{display:none!important}
+
+header{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px 0 8px}
+.logo{font-family:var(--display);text-transform:uppercase;font-size:24px;letter-spacing:.02em;color:#FFD3EA;text-shadow:0 0 6px rgba(255,62,165,.9),0 0 18px rgba(255,62,165,.5)}
+.logo small{display:block;font-family:var(--body);font-size:12px;letter-spacing:.12em;color:var(--muted);text-shadow:none}
+.ghost{background:none;border:1.5px solid var(--line);border-radius:999px;padding:7px 14px;font-size:14px;color:var(--muted)}
+
+.card{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:18px;margin-top:14px}
+h1,h2{font-family:var(--display);font-weight:400;text-transform:uppercase;margin:0;letter-spacing:.01em}
+h1{font-size:34px;line-height:1}
+h2{font-size:20px}
+.sub{color:var(--muted);font-size:14px;margin:6px 0 0}
+
+/* sign in */
+.signin form{display:grid;gap:10px;margin-top:14px}
+.signin input{background:#FDF2F7;color:var(--dark-ink);border:1.5px solid #F0C6D8;border-radius:12px;padding:13px 14px;font-size:16px;width:100%}
+.hot{background:linear-gradient(180deg,#FF6BBA,#FF2E96);color:#fff;border:0;border-radius:12px;padding:14px 18px;font-weight:700;font-size:16px;box-shadow:0 8px 20px rgba(224,21,111,.35)}
+.hot:disabled{opacity:.6}
+.msg{font-size:14px;min-height:1.4em}
+.msg.err{color:var(--bad)} .msg.ok{color:var(--ok)}
+
+/* totals */
+.totals .big{font-family:var(--display);font-size:44px;line-height:1;margin-top:6px}
+.totals .big small{font-family:var(--body);font-size:15px;color:var(--muted);font-weight:500}
+.bar{height:10px;border-radius:999px;background:var(--panel-2);overflow:hidden;margin:12px 0 10px}
+.bar i{display:block;height:100%;background:linear-gradient(90deg,#FF2E96,#FF8FCD);width:0;transition:width .4s}
+.kv{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;font-size:13px;color:var(--muted)}
+.kv b{display:block;color:var(--ink);font-size:17px}
+
+.dues{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:14px}
+.due{background:var(--panel-2);border:1.5px solid transparent;border-radius:14px;padding:10px;text-align:left;font-size:13px;color:var(--muted)}
+.due b{display:block;color:var(--ink);font-size:15px}
+.due .n{font-weight:700}
+.due.past .n{color:var(--bad)} .due.past.clear .n{color:var(--ok)}
+.due[aria-pressed="true"]{border-color:var(--neon)}
+
+/* filters */
+.tools{position:sticky;top:0;z-index:5;background:linear-gradient(var(--night) 80%,transparent);padding:14px 0 10px;margin-top:6px}
+.search{width:100%;background:var(--panel);border:1.5px solid var(--line);border-radius:12px;padding:12px 14px;font-size:16px}
+.filters{display:flex;gap:8px;overflow-x:auto;margin-top:10px;padding-bottom:2px;scrollbar-width:none}
+.filters button{flex:none;background:var(--panel);border:1.5px solid var(--line);border-radius:999px;padding:6px 13px;font-size:14px;color:var(--muted)}
+.filters button[aria-pressed="true"]{background:var(--neon);border-color:var(--neon);color:#fff}
+
+/* list */
+.list{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+.row{background:var(--paper);color:var(--dark-ink);border-radius:16px;overflow:hidden}
+.row > button.head{all:unset;box-sizing:border-box;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:2px 10px;width:100%;padding:14px 16px;cursor:pointer}
+.row > button.head:focus-visible{outline:3px solid var(--neon);outline-offset:-3px;border-radius:16px}
+.nm{font-weight:700;font-size:17px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.meta{font-size:13px;color:#6A5462}
+.amt{grid-row:1/3;grid-column:2;text-align:right;align-self:center}
+.amt b{display:block;font-size:18px}
+.amt small{font-size:12px;color:#6A5462}
+.amt.behind b{color:#C2003A}
+.st{display:inline-block;font-size:11.5px;font-weight:700;padding:2px 9px;border-radius:999px;margin-right:6px;vertical-align:1px}
+.st.thinking{background:#E9E4EA;color:#4A3742}
+.st.coins{background:#FFF1C9;color:#7A5300}
+.st.pending{background:#FFD3EA;color:#A0145C;border:1.5px dashed #E0156F}
+.st.in{background:#E0156F;color:#fff}
+.st.paid{background:#2B1A24;color:#FF8FCD}
+.st.gift{background:#fff;color:#A0145C;border:1.5px solid #FF8FCD}
+.flag{color:#C2003A;font-weight:700}
+
+.body{padding:0 16px 16px;display:grid;gap:14px}
+.lbl{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#8A6F80;margin-bottom:6px}
+.seg{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+.seg button{background:#fff;border:1.5px solid #F0C6D8;border-radius:10px;padding:9px 4px;font-size:13.5px;font-weight:600;color:var(--dark-ink)}
+.seg button[aria-pressed="true"]{background:var(--dark-ink);border-color:var(--dark-ink);color:#FF8FCD}
+.quick{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px}
+.quick button{background:#FFD3EA;border:0;border-radius:999px;padding:8px 13px;font-weight:700;font-size:14px;color:#A0145C}
+.payrow{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px}
+.payrow input{background:#fff;border:1.5px solid #F0C6D8;border-radius:10px;padding:11px 12px;font-size:16px;color:var(--dark-ink);width:100%}
+.payrow button{background:var(--dark-ink);color:#fff;border:0;border-radius:10px;padding:0 18px;font-weight:700}
+.owed{font-size:13.5px;color:#6A5462;display:grid;gap:2px}
+.note{font-style:italic;font-size:14px;color:#A0145C}
+.del{justify-self:start;background:none;border:0;padding:0;color:#8A6F80;font-size:13px;text-decoration:underline}
+
+.empty{color:var(--muted);text-align:center;padding:30px 10px}
+
+/* toast */
+.toast{position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 16px);transform:translateX(-50%);width:min(560px,calc(100% - 32px));
+  background:#2B1A24;border:1.5px solid var(--neon);border-radius:14px;padding:12px 14px;display:flex;align-items:center;gap:12px;justify-content:space-between;
+  box-shadow:0 10px 30px rgba(0,0,0,.5);z-index:20;font-size:15px}
+.toast.err{border-color:var(--bad)}
+.toast button{background:none;border:1.5px solid var(--neon-soft);color:var(--neon-soft);border-radius:999px;padding:5px 12px;font-weight:700;flex:none}
+
+@media (max-width:420px){ .kv{grid-template-columns:1fr 1fr} .kv div:last-child{grid-column:1/-1} }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="logo">Bri's 21<small>PAYMENT LOG</small></div>
+    <button class="ghost" id="outBtn" type="button" hidden>Sign out</button>
+  </header>
+
+  <!-- signed out -->
+  <section class="card signin" id="signin" hidden>
+    <h1>Hey Dani.</h1>
+    <p class="sub">Put in your email and tap the link we send you. Open it on this phone so you stay signed in here.</p>
+    <form id="loginForm">
+      <input id="email" type="email" autocomplete="email" inputmode="email" required aria-label="Email">
+      <button class="hot" id="loginBtn" type="submit">Send my link</button>
+      <div class="msg" id="loginMsg" role="status" aria-live="polite"></div>
+    </form>
+  </section>
+
+  <!-- wrong account -->
+  <section class="card" id="denied" hidden>
+    <h1>Not this account.</h1>
+    <p class="sub" id="deniedMsg"></p>
+  </section>
+
+  <!-- signed in -->
+  <main id="app" hidden>
+    <section class="card totals" aria-labelledby="totH">
+      <h2 id="totH">Money in</h2>
+      <div class="big" id="collected">$0 <small>of $0 expected</small></div>
+      <div class="bar"><i id="barFill"></i></div>
+      <div class="kv">
+        <div>Trip shares<b id="fromShares">$0</b></div>
+        <div>Gifts<b id="fromGifts">$0</b></div>
+        <div>Still needed<b id="stillNeeded">$0</b></div>
+      </div>
+      <p class="sub" id="shareLine"></p>
+      <div class="dues" id="dues" role="group" aria-label="Due dates"></div>
+    </section>
+
+    <div class="tools">
+      <input class="search" id="q" type="search" placeholder="Find a name" aria-label="Find a name" autocomplete="off">
+      <div class="filters" id="filters" role="group" aria-label="Filter"></div>
+    </div>
+
+    <ul class="list" id="list"></ul>
+    <p class="empty" id="empty" hidden></p>
+  </main>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite" hidden><span id="toastMsg"></span><button type="button" id="undoBtn" hidden>Undo</button></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script src="config.js"></script>
+<script>
+const $ = s => document.querySelector(s);
+const money = n => (n < 0 ? "-$" : "$") + Math.abs(Math.round(n)).toLocaleString("en-US");
+const STATUS = {
+  thinking: "Interested", coins: "Checking coins", pending: "Coming",
+  in: "Locked in", paid: "Paid in full", gift: "Sending love"
+};
+const RIDER = new Set(["pending", "in", "paid"]);   // these owe a share
+const ADMIN = CONFIG.adminEmail.toLowerCase();
+const TABLE = CONFIG.supabase.table;
+
+const sb = supabase.createClient(CONFIG.supabase.url, CONFIG.supabase.anonKey, {
+  auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true, flowType: "implicit" }
+});
+
+let rows = [], openId = null, filter = "all", dueFilter = null, undo = null;
+
+/* ---------- money math (matches the public page) ---------- */
+const MONTHS = { Jan:0, Feb:1, Mar:2, Apr:3, May:4, Jun:5, Jul:6, Aug:7, Sep:8, Oct:9, Nov:10, Dec:11 };
+const parseDue = s => { const m = /^(\w{3})\w*\s+(\d+),\s*(\d{4})$/.exec(s.trim()); return m ? new Date(+m[3], MONTHS[m[1]], +m[2], 23, 59, 59) : null; };
+function math(){
+  const committed = rows.filter(r => r.status === "in" || r.status === "paid").reduce((s, r) => s + r.guests, 0);
+  const n = committed >= CONFIG.minPayersForDisplay ? committed : CONFIG.minPayersForDisplay;
+  const van = CONFIG.vanTotal / Math.max(1, n);
+  const share = CONFIG.housePerPerson + van;
+  // what each person owes by each due date, cumulative
+  let run = 0;
+  const dues = CONFIG.schedule.map(s => {
+    run += s.amount === "house" ? CONFIG.housePerPerson : s.amount === "vanHalf" ? van / 2 : +s.amount || 0;
+    return { ...s, date: parseDue(s.due), perHead: run };
+  });
+  return { n, van, share, dues };
+}
+const owedBy = (r, d) => RIDER.has(r.status) ? r.guests * d.perHead : 0;
+const isBehind = (r, d) => RIDER.has(r.status) && d.date && d.date < new Date() && (+r.amount_paid || 0) < owedBy(r, d) - 0.5;
+
+/* ---------- auth ---------- */
+async function boot(){
+  const { data: { session } } = await sb.auth.getSession();
+  show(session);
+  sb.auth.onAuthStateChange((_e, s) => show(s));
+}
+function show(session){
+  const email = session?.user?.email?.toLowerCase();
+  $("#signin").hidden = !!session;
+  $("#outBtn").hidden = !session;
+  $("#denied").hidden = !session || email === ADMIN;
+  $("#app").hidden = !session || email !== ADMIN;
+  if (session && email !== ADMIN) $("#deniedMsg").textContent = `You're signed in as ${session.user.email}. This page only opens for the trip organizer.`;
+  if (session && email === ADMIN && !rows.length) load();
+}
+$("#loginForm").addEventListener("submit", async e => {
+  e.preventDefault();
+  const email = $("#email").value.trim(), msg = $("#loginMsg"), btn = $("#loginBtn");
+  btn.disabled = true; msg.className = "msg"; msg.textContent = "Sending…";
+  const { error } = await sb.auth.signInWithOtp({
+    email, options: { shouldCreateUser: false, emailRedirectTo: location.origin + location.pathname }
+  });
+  btn.disabled = false;
+  if (error) {
+    msg.className = "msg err";
+    msg.textContent = /signups? not allowed|not found|otp_disabled/i.test(error.message)
+      ? "That email isn't a user in this Supabase project yet. Add it under Authentication → Users, then try again."
+      : "Couldn't send it: " + error.message;
+  } else { msg.className = "msg ok"; msg.textContent = "Check your email and tap the link."; }
+});
+$("#outBtn").addEventListener("click", async () => { await sb.auth.signOut(); rows = []; });
+
+/* ---------- data ---------- */
+async function load(){
+  const { data, error } = await sb.from(TABLE).select("id,name,guests,kids,status,note,amount_paid,created_at").order("created_at", { ascending: true });
+  if (error) { toast("Couldn't load the list. Has the admin SQL in schema.sql been run? (" + error.message + ")", true); return; }
+  rows = data.map(r => ({ ...r, guests: +r.guests || 0, kids: +r.kids || 0, amount_paid: +r.amount_paid || 0 }));
+  render();
+}
+async function save(id, patch, label, before){
+  const { data, error } = await sb.from(TABLE).update(patch).eq("id", id).select("id,status,amount_paid");
+  if (error || !data?.length) { toast("Didn't save. " + (error?.message || "No permission. Check the admin policies."), true); await load(); return false; }
+  const r = rows.find(x => x.id === id); Object.assign(r, { status: data[0].status, amount_paid: +data[0].amount_paid || 0 });
+  render();
+  undo = before ? { id, patch: before } : null;
+  toast(label, false, !!before);
+  return true;
+}
+document.addEventListener("visibilitychange", () => { if (!document.hidden && !$("#app").hidden) load(); });
+
+/* ---------- render ---------- */
+function render(){
+  const m = math();
+  const riders = rows.filter(r => RIDER.has(r.status));
+  const gifts = rows.filter(r => r.status === "gift");
+  const fromShares = rows.filter(r => r.status !== "gift").reduce((s, r) => s + r.amount_paid, 0);
+  const fromGifts = gifts.reduce((s, r) => s + r.amount_paid, 0);
+  const heads = riders.reduce((s, r) => s + r.guests, 0);
+  const expected = heads * m.share;
+  const total = fromShares + fromGifts;
+  $("#collected").innerHTML = `${money(total)} <small>of ${money(expected)} expected</small>`;
+  $("#barFill").style.width = expected ? Math.min(100, total / expected * 100) + "%" : "0";
+  $("#fromShares").textContent = money(fromShares);
+  $("#fromGifts").textContent = money(fromGifts);
+  $("#stillNeeded").textContent = money(Math.max(0, expected - total));
+  $("#shareLine").textContent = `${heads} paying ${heads === 1 ? "head" : "heads"} × ${money(m.share)} each (house ${money(CONFIG.housePerPerson)} + van ${money(m.van)}, split ${m.n} ways${CONFIG.vanIsEstimate ? ", van is an estimate" : ""}).`;
+
+  const dues = $("#dues"); dues.innerHTML = "";
+  m.dues.forEach((d, i) => {
+    const past = d.date && d.date < new Date();
+    const behind = riders.filter(r => isBehind(r, d)).length;
+    const b = document.createElement("button"); b.type = "button";
+    b.className = "due" + (past ? " past" : "") + (past && !behind ? " clear" : "");
+    b.setAttribute("aria-pressed", String(dueFilter === i));
+    b.innerHTML = "<b></b><span></span><div class='n'></div>";
+    b.querySelector("b").textContent = d.due.replace(/,\s*\d{4}$/, "");
+    b.querySelector("span").textContent = money(d.perHead) + " / head";
+    b.querySelector(".n").textContent = past ? (behind ? `${behind} behind` : "All caught up") : `${riders.filter(r => r.amount_paid < owedBy(r, d) - 0.5).length} still owe`;
+    b.addEventListener("click", () => { dueFilter = dueFilter === i ? null : i; render(); });
+    dues.append(b);
+  });
+
+  const F = [["all", "All"], ["riders", "Riders"], ["behind", "Behind"], ["maybe", "Not committed"], ["gift", "Gifts"]];
+  const fl = $("#filters"); fl.innerHTML = "";
+  F.forEach(([k, l]) => {
+    const b = document.createElement("button"); b.type = "button"; b.textContent = l;
+    b.setAttribute("aria-pressed", String(filter === k && dueFilter === null));
+    b.addEventListener("click", () => { filter = k; dueFilter = null; render(); });
+    fl.append(b);
+  });
+
+  const q = $("#q").value.trim().toLowerCase();
+  const behindAny = r => m.dues.some(d => isBehind(r, d));
+  let list = rows.filter(r => !q || r.name.toLowerCase().includes(q));
+  if (dueFilter !== null) list = list.filter(r => RIDER.has(r.status) && r.amount_paid < owedBy(r, m.dues[dueFilter]) - 0.5);
+  else if (filter === "riders") list = list.filter(r => RIDER.has(r.status));
+  else if (filter === "behind") list = list.filter(behindAny);
+  else if (filter === "maybe") list = list.filter(r => r.status === "thinking" || r.status === "coins");
+  else if (filter === "gift") list = list.filter(r => r.status === "gift");
+  list.sort((a, b) => a.name.localeCompare(b.name));
+
+  const ul = $("#list"); ul.innerHTML = "";
+  $("#empty").hidden = !!list.length;
+  $("#empty").textContent = rows.length ? "Nobody matches that." : "No RSVPs yet.";
+  list.forEach(r => ul.append(rowEl(r, m, behindAny(r))));
+}
+
+function rowEl(r, m, behind){
+  const li = document.createElement("li"); li.className = "row";
+  const owe = RIDER.has(r.status) ? r.guests * m.share : 0;
+  const head = document.createElement("button"); head.className = "head"; head.type = "button";
+  head.setAttribute("aria-expanded", String(openId === r.id));
+  head.innerHTML = `<div class="nm"></div><div class="meta"><span class="st ${r.status}"></span><span class="hc"></span></div><div class="amt"><b></b><small></small></div>`;
+  head.querySelector(".nm").textContent = r.name;
+  head.querySelector(".st").textContent = STATUS[r.status] || r.status;
+  head.querySelector(".hc").textContent = r.status === "gift" ? "" : `${r.guests}${r.kids ? ` + ${r.kids} kid${r.kids === 1 ? "" : "s"}` : ""}`;
+  head.querySelector(".amt b").textContent = money(r.amount_paid);
+  head.querySelector(".amt small").textContent = owe ? `of ${money(owe)}` : r.status === "gift" ? "gift" : "";
+  if (behind) head.querySelector(".amt").classList.add("behind");
+  head.addEventListener("click", () => { openId = openId === r.id ? null : r.id; render(); if (openId) setTimeout(() => li.querySelector("input")?.focus({ preventScroll: true }), 0); });
+  li.append(head);
+  if (openId !== r.id) return li;
+
+  const body = document.createElement("div"); body.className = "body";
+
+  // owed breakdown
+  if (RIDER.has(r.status)) {
+    const ow = document.createElement("div"); ow.className = "owed";
+    m.dues.forEach(d => {
+      const line = document.createElement("div");
+      const need = owedBy(r, d), late = isBehind(r, d);
+      line.innerHTML = `<span></span>`;
+      line.firstChild.textContent = `By ${d.due.replace(/,\s*\d{4}$/, "")}: ${money(need)}` + (late ? ` · behind ${money(need - r.amount_paid)}` : r.amount_paid >= need - 0.5 ? " ✓" : "");
+      if (late) line.firstChild.className = "flag";
+      ow.append(line);
+    });
+    body.append(ow);
+  }
+  if (r.note) { const n = document.createElement("div"); n.className = "note"; n.textContent = `“${r.note}”`; body.append(n); }
+
+  // payment
+  const pay = document.createElement("div");
+  pay.innerHTML = `<div class="lbl">Add a payment</div><div class="quick"></div><form class="payrow"><input type="number" inputmode="decimal" step="0.01" placeholder="Amount" aria-label="Payment amount"><button type="submit">+ Add</button></form>`;
+  const quick = pay.querySelector(".quick");
+  const presets = r.status === "gift" ? [20, 50, 100] : [...new Set([
+    CONFIG.housePerPerson * r.guests,
+    Math.round(m.van / 2 * r.guests),
+    Math.max(0, Math.round(owe - r.amount_paid))
+  ])].filter(v => v > 0);
+  presets.forEach((v, i) => {
+    const b = document.createElement("button"); b.type = "button";
+    b.textContent = "+" + money(v) + (r.status !== "gift" && i === presets.length - 1 && v === Math.round(owe - r.amount_paid) ? " (rest)" : "");
+    b.addEventListener("click", () => addPay(r, v));
+    quick.append(b);
+  });
+  pay.querySelector("form").addEventListener("submit", e => {
+    e.preventDefault();
+    const v = parseFloat(e.target.querySelector("input").value);
+    if (!v) return;
+    addPay(r, v);
+  });
+  body.append(pay);
+
+  // status
+  const st = document.createElement("div");
+  st.innerHTML = `<div class="lbl">Status</div><div class="seg" role="group" aria-label="Status"></div>`;
+  Object.entries(STATUS).forEach(([k, l]) => {
+    const b = document.createElement("button"); b.type = "button"; b.textContent = l;
+    b.setAttribute("aria-pressed", String(r.status === k));
+    b.addEventListener("click", () => { if (r.status !== k) save(r.id, { status: k }, `${r.name}: ${l}`, { status: r.status }); });
+    st.querySelector(".seg").append(b);
+  });
+  body.append(st);
+
+  const del = document.createElement("button"); del.type = "button"; del.className = "del"; del.textContent = "Remove from list";
+  del.addEventListener("click", async () => {
+    if (!confirm(`Remove ${r.name} from the list? This can't be undone.`)) return;
+    const { error } = await sb.from(TABLE).delete().eq("id", r.id);
+    if (error) { toast("Couldn't remove: " + error.message, true); return; }
+    openId = null; await load(); toast(`Removed ${r.name}`);
+  });
+  body.append(del);
+
+  li.append(body);
+  return li;
+}
+
+async function addPay(r, v){
+  const next = Math.round((r.amount_paid + v) * 100) / 100;
+  if (next < 0) { toast("That would put them below $0.", true); return; }
+  await save(r.id, { amount_paid: next }, `${money(v)} logged for ${r.name} · ${money(next)} total`, { amount_paid: r.amount_paid });
+}
+
+/* ---------- toast + undo ---------- */
+let toastT;
+function toast(text, err = false, canUndo = false){
+  $("#toastMsg").textContent = text;
+  $("#toast").className = "toast" + (err ? " err" : "");
+  $("#toast").hidden = false;
+  $("#undoBtn").hidden = !canUndo;
+  if (!canUndo) undo = null;
+  clearTimeout(toastT); toastT = setTimeout(() => { $("#toast").hidden = true; undo = null; }, canUndo ? 8000 : 5000);
+}
+$("#undoBtn").addEventListener("click", async () => {
+  if (!undo) return;
+  const u = undo; undo = null;
+  await save(u.id, u.patch, "Undone");
+});
+
+$("#q").addEventListener("input", render);
+boot();
+</script>
+</body>
+</html>

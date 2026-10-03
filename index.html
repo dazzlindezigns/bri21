@@ -6,6 +6,19 @@
 <title>Bri's 21st | Around the World, Feb 2027</title>
 <meta name="description" content="Bri turns 21. Austin to Kissimmee, one big house, one big van, and Drink Around the World at EPCOT on Feb 9, 2027.">
 <meta name="theme-color" content="#170B14">
+<link rel="canonical" href="https://bri21.com/">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://bri21.com/">
+<meta property="og:title" content="Bri's 21st | Around the World">
+<meta property="og:description" content="Austin to Kissimmee, Feb 2027. One big house, one big van, and Drink Around the World on Bri's birthday. Who all coming?">
+<meta property="og:image" content="https://bri21.com/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Bri's 21st, Around the World. Feb 5 to 10, 2027, Orlando, FL.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Bri's 21st | Around the World">
+<meta name="twitter:description" content="Austin to Kissimmee, Feb 2027. One big house, one big van, and Drink Around the World on Bri's birthday.">
+<meta name="twitter:image" content="https://bri21.com/og.jpg">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍸</text></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -382,7 +395,7 @@ footer .logo{display:block;font-size:44px;margin-bottom:6px}
       <div class="count" aria-live="off">
         <h3>Countdown to roll out</h3>
         <div class="cd"><div><b id="cdD">0</b><span>Days</span></div><div><b id="cdH">0</b><span>Hours</span></div><div><b id="cdM">0</b><span>Minutes</span></div><div><b id="cdS">0</b><span>Seconds</span></div></div>
-        <p id="cdNote">Van leaves Austin Thursday night, Feb 4</p>
+        <p id="cdNote">Van leaves Austin Thursday night, Feb 4, around 8 or 9</p>
       </div>
       <div class="polaroid"><div class="tape" aria-hidden="true"></div><img src="images/bri-2.jpg" alt="Bri"><span>21 looks good on me</span></div>
     </div>
@@ -476,7 +489,7 @@ footer .logo{display:block;font-size:44px;margin-bottom:6px}
         <dl id="payList"></dl>
         <p>Put <span class="memo" id="memo"></span> in the memo so we can match it to you. Your status on the list updates once we log it.</p>
         <p id="policy"></p>
-        <p>Can't come but want to bless the birthday girl? Gifts go to the same Cash App. Put <span class="memo" id="giftMemo"></span> in the memo so it doesn't get counted as a trip payment.</p>
+        <p>Can't come but still want to chip in? Gifts go toward the trip, same Cash App. Put <span class="memo" id="giftMemo"></span> in the memo so we know it's a gift. Want to send Bri something personal? Hit her up directly.</p>
       </div>
     </section>
   </div>
@@ -713,7 +726,7 @@ const COPY = {
   pending:  ["Say less. You're coming.", "Add your name, then send your deposit by the due date."],
   thinking: ["Interested? We see you.", "Put your name down. You can lock in later."],
   coins:    ["Check them coins.", "No pressure. Get on the list so we can count you."],
-  gift:     ["We'll miss you. Send the love anyway.", `Put your name and a note for Bri on the list. Then send your gift to ${(CONFIG.pay.find(p => p.value.startsWith("$")) || { value: "Cash App" }).value} with "${CONFIG.giftMemo}" in the memo.`]
+  gift:     ["We'll miss you. Send the love anyway.", `Your gift goes toward the trip. Put your name and a note for Bri on the list, then send it to ${(CONFIG.pay.find(p => p.value.startsWith("$")) || { value: "Cash App" }).value} with "${CONFIG.giftMemo}" in the memo.`]
 };
 let chosen = "pending";
 function pick(status, focus){
