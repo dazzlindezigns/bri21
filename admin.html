@@ -127,9 +127,10 @@ h2{font-size:20px}
   <!-- signed out -->
   <section class="card signin" id="signin" hidden>
     <h1>Hey Dani.</h1>
-    <p class="sub">Put in your email and tap the link we send you. Open it on this phone so you stay signed in here.</p>
+    <p class="sub">Put in your email and tap the link we send you, opened on this phone. Or use the same password you use for your other apps on this Supabase project.</p>
     <form id="loginForm">
       <input id="email" type="email" autocomplete="email" inputmode="email" required aria-label="Email">
+      <input id="pw" type="password" autocomplete="current-password" placeholder="Password (optional)" aria-label="Password (optional)">
       <button class="hot" id="loginBtn" type="submit">Send my link</button>
       <div class="msg" id="loginMsg" role="status" aria-live="polite"></div>
     </form>
@@ -222,7 +223,15 @@ function show(session){
 $("#loginForm").addEventListener("submit", async e => {
   e.preventDefault();
   const email = $("#email").value.trim(), msg = $("#loginMsg"), btn = $("#loginBtn");
-  btn.disabled = true; msg.className = "msg"; msg.textContent = "Sending…";
+  const pw = $("#pw").value;
+  btn.disabled = true; msg.className = "msg"; msg.textContent = pw ? "Signing in…" : "Sending…";
+  if (pw) {
+    const { error } = await sb.auth.signInWithPassword({ email, password: pw });
+    btn.disabled = false;
+    if (error) { msg.className = "msg err"; msg.textContent = /invalid/i.test(error.message) ? "Email or password didn't match. Leave the password blank to get a link instead." : "Couldn't sign in: " + error.message; }
+    else { msg.textContent = ""; $("#pw").value = ""; }
+    return;
+  }
   const { error } = await sb.auth.signInWithOtp({
     email, options: { shouldCreateUser: false, emailRedirectTo: location.origin + location.pathname }
   });
@@ -234,6 +243,7 @@ $("#loginForm").addEventListener("submit", async e => {
       : "Couldn't send it: " + error.message;
   } else { msg.className = "msg ok"; msg.textContent = "Check your email and tap the link."; }
 });
+$("#pw").addEventListener("input", e => { $("#loginBtn").textContent = e.target.value ? "Sign in" : "Send my link"; });
 $("#outBtn").addEventListener("click", async () => { await sb.auth.signOut(); rows = []; });
 
 /* ---------- data ---------- */
