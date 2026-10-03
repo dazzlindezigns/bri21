@@ -8,10 +8,13 @@ const CONFIG = {
   vrboUrl: "https://www.vrbo.com/5425883",
   ticketsUrl: "https://disneyworld.disney.go.com/admission/tickets/",
   housePerPerson: 150,                      // flat, ages 9+
-  vanTotal: 9000,     vanIsEstimate: true,  // 20-passenger van + driver, Feb 4–11, incl. tip
+  // Van: flat per-person ESTIMATE so the whole trip lands at $500/person (house $150 + van $350).
+  // We're still shopping van rates. When a real quote comes in, change vanPerPerson
+  // and set vanIsEstimate: false to drop the estimate warnings.
+  vanPerPerson: 350,  vanIsEstimate: true,  // 20-passenger van + driver, Feb 4–11
+  estimateNote: "The $500 is an estimate. The $150 house share is locked in, but we're still shopping for the best van rate, so the van part can change. We'll update this page as soon as it's final.",
   epcotTicket: 190,
   datwBudget: "$120–$160",
-  minPayersForDisplay: 16,
   schedule: [
     { what: "Deposit (your house share)", amount: "house", due: "Nov 15, 2026", note: "Holds your spot. We book the house once enough deposits are in." },
     { what: "Half your van share", amount: "vanHalf", due: "Dec 15, 2026", note: "Locks in the van and driver." },

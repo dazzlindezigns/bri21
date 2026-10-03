@@ -23,7 +23,7 @@ An invitation, itinerary, and RSVP site for a family road trip celebrating Bri's
 1. **The Supabase project is SHARED** with Dani's other live apps (Snaplist, Bri's booking app, KJ's DJ app). Only create or alter objects prefixed `bri21_`. **Never modify, drop, or migrate any other table, policy, function, bucket, or auth setting.** Read-only inspection is fine.
 2. The anon key is public by design. Never put the service role key in client code or commit it.
 3. No payment processing in the site (no Stripe checkout). Payments go by Cash App (`$bri21celebration`) outside the site. No Zelle. Dani logs them.
-4. Don't invent prices or facts. Values marked as estimates stay estimates until Dani gives real numbers.
+4. Don't invent prices or facts. (The $500/person total is Dani's own target estimate.) Values marked as estimates stay estimates until Dani gives real numbers.
 
 ## Tasks (in order)
 
@@ -46,7 +46,7 @@ An invitation, itinerary, and RSVP site for a family road trip celebrating Bri's
    - UI: list of RSVPs with a tap to set status (Interested / Checking coins / Coming / Locked in / Paid in full) and a quick "+ payment" amount field that adds to `amount_paid`. Show totals: collected so far vs. expected (paying heads × per-person share), and who's behind on each due date.
    - Optional: a `bri21_payments` ledger table (rsvp_id, amount, method, note, created_at) with `amount_paid` kept as a sum. Use it only if it stays simple.
 6. **House photos:** Vrbo images are hotlinked and may break. Ask Dani for 4–5 saved photos (pool, living room, game room, a themed bedroom). Put them in `/images/house/` and point `HOUSE_PHOTOS` at them.
-7. **Link previews:** DONE: `og.jpg` is rendered from `og-template.html` (fonts must load before the screenshot). family will share this by text, so add Open Graph and Twitter meta tags with a 1200×630 `og.jpg`. Generate it in the site's style (chrome "BRI'S 21st", neon, date line) and include Bri's photo only if Dani approves.
+7. **Link previews:** DONE: `og.jpg` is Dani's flyer (1000×1000, kept under 300KB so WhatsApp shows it). family will share this by text, so add Open Graph and Twitter meta tags with a 1200×630 `og.jpg`. Generate it in the site's style (chrome "BRI'S 21st", neon, date line) and include Bri's photo only if Dani approves.
 
 ### P2: Nice to have
 8. Supabase Realtime instead of polling on the RSVP list.
@@ -56,7 +56,7 @@ An invitation, itinerary, and RSVP site for a family road trip celebrating Bri's
 ## Trip facts (source of truth)
 - **House:** 9BR at Encore Resort at Reunion (Vrbo 5425883). $150 flat per person ages 9+, for 5 nights.
 - **Kids under 9:** free for the house and van. Disney tickets are free under 3.
-- **Van:** 20-passenger with driver, for the full trip including the Austin round trip. The current estimate is $9,000 total (`vanIsEstimate: true`), split among paying riders. It will be replaced with a real quote.
+- **Van:** 20-passenger with driver, for the full trip including the Austin round trip. Priced as a flat **$350/person ESTIMATE** (`vanPerPerson`, `vanIsEstimate: true`) so the whole trip is ~$500/person with the house. Dani is still shopping rates; the page must keep saying it's an estimate until she gives a real number.
 - **EPCOT:** guests buy their own standard ticket for Feb 9 (~$190 estimate). Drink Around the World budget is $120–160 for 11 drinks. Annual passholders need a park reservation; date-based tickets don't. Under-21s are welcome but can't drink. 21+ need photo ID.
 - **Itinerary:**
   - Feb 4: roll out from Austin

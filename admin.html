@@ -191,9 +191,7 @@ let rows = [], openId = null, filter = "all", dueFilter = null, undo = null;
 const MONTHS = { Jan:0, Feb:1, Mar:2, Apr:3, May:4, Jun:5, Jul:6, Aug:7, Sep:8, Oct:9, Nov:10, Dec:11 };
 const parseDue = s => { const m = /^(\w{3})\w*\s+(\d+),\s*(\d{4})$/.exec(s.trim()); return m ? new Date(+m[3], MONTHS[m[1]], +m[2], 23, 59, 59) : null; };
 function math(){
-  const committed = rows.filter(r => r.status === "in" || r.status === "paid").reduce((s, r) => s + r.guests, 0);
-  const n = committed >= CONFIG.minPayersForDisplay ? committed : CONFIG.minPayersForDisplay;
-  const van = CONFIG.vanTotal / Math.max(1, n);
+  const van = CONFIG.vanPerPerson;
   const share = CONFIG.housePerPerson + van;
   // what each person owes by each due date, cumulative
   let run = 0;
@@ -201,7 +199,7 @@ function math(){
     run += s.amount === "house" ? CONFIG.housePerPerson : s.amount === "vanHalf" ? van / 2 : +s.amount || 0;
     return { ...s, date: parseDue(s.due), perHead: run };
   });
-  return { n, van, share, dues };
+  return { van, share, dues };
 }
 const owedBy = (r, d) => RIDER.has(r.status) ? r.guests * d.perHead : 0;
 const isBehind = (r, d) => RIDER.has(r.status) && d.date && d.date < new Date() && (+r.amount_paid || 0) < owedBy(r, d) - 0.5;
@@ -271,7 +269,7 @@ function render(){
   $("#fromShares").textContent = money(fromShares);
   $("#fromGifts").textContent = money(fromGifts);
   $("#stillNeeded").textContent = money(Math.max(0, expected - total));
-  $("#shareLine").textContent = `${heads} paying ${heads === 1 ? "head" : "heads"} × ${money(m.share)} each (house ${money(CONFIG.housePerPerson)} + van ${money(m.van)}, split ${m.n} ways${CONFIG.vanIsEstimate ? ", van is an estimate" : ""}).`;
+  $("#shareLine").textContent = `${heads} paying ${heads === 1 ? "head" : "heads"} × ${money(m.share)} each (house ${money(CONFIG.housePerPerson)} + van ${money(m.van)}${CONFIG.vanIsEstimate ? ", van is still an estimate" : ""}).`;
 
   const dues = $("#dues"); dues.innerHTML = "";
   m.dues.forEach((d, i) => {

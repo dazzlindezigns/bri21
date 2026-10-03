@@ -12,9 +12,9 @@
 <meta property="og:title" content="Bri's 21st | Around the World">
 <meta property="og:description" content="Austin to Kissimmee, Feb 2027. One big house, one big van, and Drink Around the World on Bri's birthday. Who all coming?">
 <meta property="og:image" content="https://bri21.com/og.jpg">
-<meta property="og:image:width" content="1200">
-<meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="Bri's 21st, Around the World. Feb 5 to 10, 2027, Orlando, FL.">
+<meta property="og:image:width" content="1000">
+<meta property="og:image:height" content="1000">
+<meta property="og:image:alt" content="Bri's 21st, Around the World and into 21. Feb 5 to 10, 2027, Orlando, FL. Drink Around the World on Feb 9.">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Bri's 21st | Around the World">
 <meta name="twitter:description" content="Austin to Kissimmee, Feb 2027. One big house, one big van, and Drink Around the World on Bri's birthday.">
@@ -173,6 +173,9 @@ h2.sec .neon{display:block}
 .dmg li.total b{font-size:15px}
 .est{font-family:var(--body);font-size:10px;font-weight:700;background:#FFD3EA;color:#A0145C;padding:2px 6px;border-radius:999px;margin-left:6px;vertical-align:2px;text-transform:none;letter-spacing:0}
 .own{margin:14px 0 0;font-size:13.5px;color:var(--muted)}
+.estbox{display:flex;gap:10px;align-items:flex-start;margin:0 0 16px;padding:12px 14px;border-radius:12px;background:#FFF1C9;color:#5A3D00;border:2px dashed #E0A100;font-size:14.5px;line-height:1.45}
+.estbox b{display:block;font-family:var(--display);font-weight:400;text-transform:uppercase;letter-spacing:.04em;font-size:17px;color:#7A5300}
+.estbox::before{content:"!";flex:none;display:grid;place-items:center;width:24px;height:24px;border-radius:50%;background:#E0A100;color:#fff;font-weight:800;margin-top:2px}
 .own b{color:var(--ink)}
 .card .btn{margin-top:16px;align-self:flex-start}
 
@@ -450,6 +453,7 @@ footer .logo{display:block;font-size:44px;margin-bottom:6px}
       <section class="card" id="damage" aria-labelledby="dmgH">
         <div class="card-h"><svg><use href="#i-money"/></svg><h2 class="sec chrome" id="dmgH">The damage</h2></div>
         <p>Per person, ages 9 and up. Kids under 9 are free for the house and van.</p>
+        <div class="estbox" data-est hidden><div><b>Estimate, not final</b><span data-est-note></span></div></div>
         <ul class="dmg" id="dmgList"></ul>
         <p class="own" id="ownLine"></p>
         <a class="btn hot" href="#pay">Pay your share</a>
@@ -478,10 +482,9 @@ footer .logo{display:block;font-size:44px;margin-bottom:6px}
     <section class="pay" id="pay" aria-label="Paying your share">
       <div class="calc">
         <h3>Your share</h3>
-        <p>Your $<span id="houseAmt">150</span> house share plus your cut of the van. Drag to see what happens to the van cost when more people come.</p>
+        <p>Your $<span id="houseAmt">150</span> house share plus your van share. That's the whole trip: house and ride, Austin and back.</p>
         <div class="big" id="shareBig">—<small> per person</small></div>
-        <input type="range" id="shareRange" min="6" max="30" step="1" aria-label="Number of people splitting the van">
-        <div class="rl"><span id="rangeLabel"></span><span id="liveLabel"></span></div>
+        <div class="estbox" data-est hidden><div><b>Estimate, not final</b><span data-est-note></span></div></div>
         <ol class="sched" id="sched"></ol>
       </div>
       <div class="how">
@@ -545,8 +548,9 @@ footer .logo{display:block;font-size:44px;margin-bottom:6px}
         <details><summary>Do kids pay?</summary><p>Kids under 9 are free for the house and the van. Anyone going into EPCOT still needs a park ticket, and Disney is free for kids under 3.</p></details>
         <details><summary>When is everything due?</summary><p id="faqDue"></p></details>
         <details><summary>Is there a payment plan?</summary><p>Yes. It's broken into three payments: your house share as the deposit, then your van share in two halves.</p></details>
+        <details><summary>Is $500 the final price?</summary><p>Not yet. The $150 house share is set. The van is still an estimate while we shop for the best rate, so that part can move. We'll update this page as soon as it's final. Your deposit is the house share, so you can lock in now.</p></details>
         <details><summary>What if I pay and then can't make it?</summary><p id="faqPolicy"></p></details>
-        <details><summary>Can I drive myself instead of riding in the van?</summary><p>Talk to Dani first. The van is split between everybody riding, so we need to know before the van gets booked.</p></details>
+        <details><summary>Can I drive myself instead of riding in the van?</summary><p>Talk to Dani first. We're pricing the van by how many people ride, so we need to know before the van gets booked.</p></details>
         <details><summary>What should I pack?</summary><p>Swimsuit, comfortable walking shoes for EPCOT, a pillow and blanket for the ride, your birthday fit, and your photo ID if you're drinking.</p></details>
       </div>
     </div>
@@ -613,41 +617,32 @@ CONFIG.pay.filter(p => p.value && !p.value.startsWith("[")).forEach(p => {
 })();
 
 /* money */
-const vanShare = n => CONFIG.vanTotal / Math.max(1, n);
-const shareFor = n => CONFIG.housePerPerson + vanShare(n);
+const vanShare = () => CONFIG.vanPerPerson;
+const shareFor = () => CONFIG.housePerPerson + vanShare();
 let committedPayers = 0;
 function renderMoney(){
-  const n = committedPayers >= CONFIG.minPayersForDisplay ? committedPayers : CONFIG.minPayersForDisplay;
   const est = CONFIG.vanIsEstimate ? '<span class="est">estimate</span>' : "";
   $("#dmgList").innerHTML = `
-    <li>${ICON("house")}<div><b>Vacation home (5 nights)</b><small>Flat rate per person</small></div><strong>${money(CONFIG.housePerPerson)}</strong></li>
-    <li>${ICON("van")}<div><b>Van + driver${est}</b><small>${money(CONFIG.vanTotal)} split ${n} ways</small></div><strong>${money(vanShare(n))}</strong></li>
-    <li class="total"><span></span><div><b>Paid to us, per person</b></div><strong>${money(shareFor(n))}</strong></li>
+    <li>${ICON("house")}<div><b>Vacation home (5 nights)</b><small>Flat rate per person. Locked in.</small></div><strong>${money(CONFIG.housePerPerson)}</strong></li>
+    <li>${ICON("van")}<div><b>Van + driver${est}</b><small>${CONFIG.vanIsEstimate ? "Still shopping rates. Can change." : "Your share of the van"}</small></div><strong>${CONFIG.vanIsEstimate ? "~" : ""}${money(vanShare())}</strong></li>
+    <li class="total"><span></span><div><b>Paid to us, per person${est}</b></div><strong>${CONFIG.vanIsEstimate ? "~" : ""}${money(shareFor())}</strong></li>
     <li>${ICON("ticket")}<div><b>EPCOT ticket</b><small>Buy your own on Disney's site</small></div><strong>~${money(CONFIG.epcotTicket)}</strong></li>
     <li>${ICON("glass")}<div><b>Drinks, 11 countries</b><small>Your liver, your budget</small></div><strong>${CONFIG.datwBudget}</strong></li>`;
   $("#ownLine").innerHTML = "<b>Also on you:</b> road food and spending money.";
 
   const sc = $("#sched"); sc.innerHTML = "";
   CONFIG.schedule.forEach(s => {
-    const amt = s.amount === "house" ? CONFIG.housePerPerson : s.amount === "vanHalf" ? vanShare(n) / 2 : s.amount;
+    const amt = s.amount === "house" ? CONFIG.housePerPerson : s.amount === "vanHalf" ? vanShare() / 2 : s.amount;
     const li = document.createElement("li");
     li.innerHTML = "<div><b></b><small></small></div><strong></strong>";
     li.querySelector("b").textContent = `${s.what}, due ${s.due}`;
     li.querySelector("small").textContent = s.note;
-    li.querySelector("strong").textContent = money(amt);
+    li.querySelector("strong").textContent = (s.amount === "vanHalf" && CONFIG.vanIsEstimate ? "~" : "") + money(amt);
     sc.append(li);
   });
-  const r = $("#shareRange");
-  if (!r.dataset.touched) r.value = n;
-  updateRange();
+  $("#shareBig").innerHTML = (CONFIG.vanIsEstimate ? "~" : "") + money(shareFor()) + "<small>" + (CONFIG.vanIsEstimate ? " est. per person" : " per person") + "</small>";
 }
-function updateRange(){
-  const v = +$("#shareRange").value;
-  $("#shareBig").innerHTML = money(shareFor(v)) + "<small> per person</small>";
-  $("#rangeLabel").textContent = v + " people splitting the van";
-  $("#liveLabel").textContent = committedPayers ? committedPayers + " locked in now" : "";
-}
-$("#shareRange").addEventListener("input", e => { e.target.dataset.touched = "1"; updateRange(); });
+document.querySelectorAll("[data-est]").forEach(el => { el.hidden = !CONFIG.vanIsEstimate; el.querySelector("[data-est-note]").textContent = " " + CONFIG.estimateNote; });
 
 /* data: Supabase */
 const Store = {
