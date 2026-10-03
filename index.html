@@ -1,0 +1,749 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Bri's 21st | Around the World, Feb 2027</title>
+<meta name="description" content="Bri turns 21. Austin to Kissimmee, one big house, one big van, and Drink Around the World at EPCOT on Feb 9, 2027.">
+<meta name="theme-color" content="#170B14">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍸</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Bricolage+Grotesque:opsz,wght@12..96,300..700&family=Yellowtail&display=swap" rel="stylesheet">
+<style>
+:root{
+  --night:#170B14; --night-2:#1F0F1B; --panel:#26131F; --panel-2:#311827;
+  --neon:#FF3EA5; --neon-soft:#FF8FCD; --blush:#F8C9DD; --paper:#FCE3EE;
+  --chrome:#D9D6DE; --steel:#9A96A3; --ink:#F6EEF3; --muted:#C2B6BF; --line:rgba(255,62,165,.28);
+  --dark-ink:#2B1A24;
+  --display:"Anton","Impact","Haettenschweiler","Arial Narrow Bold",sans-serif;
+  --body:"Bricolage Grotesque",ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
+  --script:"Yellowtail","Brush Script MT","Segoe Script",cursive;
+  --glow:0 0 6px rgba(255,62,165,.9),0 0 18px rgba(255,62,165,.6),0 0 42px rgba(255,62,165,.35);
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-behavior:smooth;scroll-padding-top:calc(env(safe-area-inset-top,0px) + 70px)}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{animation:none!important;transition:none!important}}
+body{margin:0;background:var(--night);color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.55;-webkit-font-smoothing:antialiased;
+  background-image:radial-gradient(1200px 600px at 85% -10%,rgba(255,62,165,.22),transparent 60%),radial-gradient(900px 500px at -10% 40%,rgba(255,62,165,.12),transparent 60%);background-attachment:fixed}
+img{max-width:100%;display:block}
+a{color:var(--neon-soft)}
+:focus-visible{outline:3px solid var(--neon);outline-offset:3px;border-radius:6px}
+.wrap{max-width:1180px;margin:0 auto;padding:0 20px}
+
+.chrome{background:linear-gradient(180deg,#FFFFFF 0%,#E4E1E8 30%,#8D8996 48%,#F1EEF4 60%,#A6A2AF 82%,#E9E6EE 100%);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 2px 0 rgba(0,0,0,.55)) drop-shadow(0 0 14px rgba(255,62,165,.25))}
+.neon{color:#FFD3EA;text-shadow:var(--glow)}
+.script{font-family:var(--script);font-weight:400}
+h2.sec{font-family:var(--display);font-weight:400;text-transform:uppercase;line-height:.95;letter-spacing:.01em;margin:0;font-size:clamp(34px,4.2vw,52px)}
+h2.sec .neon{display:block}
+
+/* nav */
+.nav{position:sticky;top:0;z-index:30;background:rgba(23,11,20,.86);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--line);padding-top:env(safe-area-inset-top,0px)}
+.nav .wrap{display:flex;align-items:center;gap:22px;height:62px}
+.logo{font-family:var(--script);font-size:34px;color:#FFD3EA;text-shadow:var(--glow);text-decoration:none;line-height:1;flex:none}
+.links{display:flex;gap:16px;margin:0 auto;overflow-x:auto;scrollbar-width:none}
+.links::-webkit-scrollbar{display:none}
+.links a{font-family:var(--display);text-transform:uppercase;font-size:15px;letter-spacing:.04em;color:var(--chrome);text-decoration:none;white-space:nowrap;padding:4px 0;border-bottom:2px solid transparent}
+.links a:hover{color:#fff;border-color:var(--neon)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font:600 15px/1 var(--body);padding:14px 22px;border-radius:12px;text-decoration:none;cursor:pointer;border:1.5px solid transparent;transition:transform .15s,box-shadow .15s,background .15s}
+.btn:hover{transform:translateY(-1px)}
+.btn.hot{background:linear-gradient(180deg,#FF6BBA,#FF2E96);color:#fff;box-shadow:0 0 0 1px rgba(255,255,255,.15) inset,0 0 22px rgba(255,62,165,.55)}
+.btn.hot:hover{box-shadow:0 0 0 1px rgba(255,255,255,.2) inset,0 0 34px rgba(255,62,165,.8)}
+.btn.soft{background:var(--blush);color:#A0145C}
+.btn.out{background:rgba(0,0,0,.35);color:#fff;border-color:rgba(255,255,255,.5)}
+.btn.out:hover{border-color:var(--neon)}
+.nav .btn{padding:10px 18px;font-size:14px;flex:none}
+
+/* hero */
+.hero{position:relative;overflow:hidden;border-bottom:1px solid var(--line)}
+.hero .wrap{display:grid;grid-template-columns:minmax(0,.95fr) minmax(0,1.25fr) minmax(0,.5fr);gap:24px;align-items:center;min-height:560px;padding-top:24px;padding-bottom:24px}
+.hero-photo{position:relative;align-self:stretch;min-height:420px}
+.hero-photo img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 20%;border-radius:20px;
+  -webkit-mask-image:linear-gradient(90deg,#000 70%,transparent 100%),linear-gradient(180deg,#000 75%,transparent 100%);-webkit-mask-composite:source-in;mask-image:linear-gradient(90deg,#000 70%,transparent 100%),linear-gradient(180deg,#000 75%,transparent 100%);mask-composite:intersect}
+.tag{position:absolute;top:18px;left:14px;font-family:var(--script);font-size:30px;line-height:1.05;color:#FFD3EA;text-shadow:var(--glow);transform:rotate(-8deg);z-index:2}
+.passport{position:absolute;left:-6px;bottom:24px;z-index:2;width:130px;aspect-ratio:3/4;background:linear-gradient(145deg,#C2185B,#7A0E3C);border-radius:8px 14px 14px 8px;box-shadow:0 18px 30px rgba(0,0,0,.5),inset 4px 0 0 rgba(0,0,0,.25);transform:rotate(-10deg);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;color:#FFD9A8}
+.passport b{font-family:var(--display);font-weight:400;letter-spacing:.12em;font-size:15px}
+.passport i{font-family:var(--script);font-style:normal;font-size:18px}
+.passport svg{width:46px;height:46px}
+.hero-copy{text-align:center;position:relative;z-index:2}
+.crown{width:56px;margin:0 auto -6px;filter:drop-shadow(0 0 10px rgba(255,62,165,.8))}
+.title{margin:0;line-height:.86}
+.title .bri{display:block;font-family:var(--display);font-weight:400;font-size:clamp(84px,11vw,150px);letter-spacing:-.01em}
+.title .num{display:block;font-family:var(--script);font-size:clamp(76px,10vw,140px);margin-top:-.15em;transform:rotate(-5deg)}
+.subt{font-family:var(--display);text-transform:uppercase;font-size:clamp(22px,2.6vw,32px);color:var(--chrome);letter-spacing:.06em;margin:10px 0 2px}
+.subt2{font-family:var(--script);font-size:clamp(26px,3vw,36px);color:var(--neon-soft);margin:0 0 18px}
+.facts-row{display:flex;justify-content:center;flex-wrap:wrap;gap:10px 26px;font-size:clamp(17px,1.8vw,21px);font-weight:600;margin-bottom:16px}
+.facts-row span{display:inline-flex;align-items:center;gap:8px}
+.facts-row svg{width:22px;height:22px;color:var(--neon)}
+.blurb{max-width:46ch;margin:0 auto 22px;color:var(--muted);font-size:16px}
+.blurb strong{color:var(--neon-soft)}
+.cta-row{display:flex;justify-content:center;flex-wrap:wrap;gap:12px}
+.signs{list-style:none;margin:0;padding:0;display:grid;gap:10px;justify-items:end;position:relative}
+.signs::before{content:"";position:absolute;right:46%;top:-20px;bottom:-30px;width:6px;background:linear-gradient(#3a2431,#1b0f17);border-radius:3px;z-index:0}
+.signs li{position:relative;z-index:1;font-family:var(--display);text-transform:uppercase;font-size:20px;letter-spacing:.04em;padding:6px 26px 6px 14px;background:#1A0D16;border:2px solid var(--neon);color:#FFE3F1;text-shadow:0 0 8px rgba(255,62,165,.9);box-shadow:0 0 14px rgba(255,62,165,.45),inset 0 0 10px rgba(255,62,165,.25);clip-path:polygon(0 0,calc(100% - 16px) 0,100% 50%,calc(100% - 16px) 100%,0 100%)}
+.signs li:nth-child(even){transform:rotate(2deg) translateX(-10px)}
+.signs li:nth-child(odd){transform:rotate(-2deg)}
+
+/* tiles */
+.tiles{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:12px;padding:28px 0}
+.tile{background:linear-gradient(180deg,var(--panel-2),var(--panel));border:1px solid var(--line);border-radius:14px;padding:18px 10px;text-align:center;box-shadow:inset 0 1px 0 rgba(255,255,255,.05)}
+.tile svg{width:34px;height:34px;color:var(--neon-soft);margin:0 auto 10px;filter:drop-shadow(0 0 6px rgba(255,62,165,.7))}
+.tile span{display:block;font-family:var(--display);text-transform:uppercase;font-size:14px;letter-spacing:.04em;line-height:1.2;color:var(--chrome)}
+
+/* assignment row */
+.row3{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1.1fr) minmax(0,.75fr);gap:20px;align-items:center;padding:20px 0 48px}
+.paper{position:relative;background:var(--paper);color:var(--dark-ink);padding:34px 30px 30px;border-radius:4px;
+  clip-path:polygon(0 3%,4% 0,12% 2%,22% 0,34% 2%,46% 0,58% 2%,70% 0,82% 2%,92% 0,100% 2%,99% 30%,100% 60%,99% 100%,88% 98%,76% 100%,64% 98%,52% 100%,40% 98%,28% 100%,16% 98%,6% 100%,0 98%,1% 60%,0 30%)}
+.paper h2{margin:0 0 12px;line-height:.9}
+.paper h2 .a{display:block;font-family:var(--display);font-weight:400;font-size:44px;text-transform:uppercase;color:var(--dark-ink)}
+.paper h2 .b{display:block;font-family:var(--script);font-size:52px;color:#D81B7A;margin-top:-6px}
+.paper p{margin:0 0 12px;font-size:16.5px}
+.paper .sig{font-family:var(--script);font-size:34px;color:#D81B7A;margin:0}
+.stamp{position:absolute;top:18px;right:18px;width:86px;height:86px;border:3px double rgba(216,27,122,.45);border-radius:50%;display:flex;align-items:center;justify-content:center;text-align:center;font-family:var(--display);font-size:11px;line-height:1.1;letter-spacing:.08em;color:rgba(216,27,122,.6);transform:rotate(14deg);text-transform:uppercase}
+.count{background:linear-gradient(180deg,#22101C,#170B14);border:1.5px solid var(--neon);border-radius:18px;padding:24px;text-align:center;box-shadow:0 0 30px rgba(255,62,165,.3),inset 0 0 24px rgba(255,62,165,.12)}
+.count h3{margin:0 0 16px;font-family:var(--display);font-weight:400;text-transform:uppercase;letter-spacing:.08em;font-size:22px;color:var(--neon-soft)}
+.cd{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.cd div{background:#1A0D16;border:1px solid var(--line);border-radius:12px;padding:14px 4px}
+.cd b{display:block;font-family:var(--display);font-weight:400;font-size:clamp(34px,4vw,52px);line-height:1;color:#FFE3F1;text-shadow:0 0 12px rgba(255,62,165,.7);font-variant-numeric:tabular-nums}
+.cd span{font-size:12px;letter-spacing:.06em;color:var(--muted);text-transform:uppercase}
+.count p{margin:14px 0 0;font-size:14px;color:var(--muted)}
+.polaroid{position:relative;background:#fff;padding:12px 12px 48px;border-radius:4px;transform:rotate(4deg);box-shadow:0 24px 40px rgba(0,0,0,.5);max-width:280px;justify-self:center}
+.polaroid img{aspect-ratio:1;object-fit:cover;filter:grayscale(1) contrast(1.05)}
+.polaroid .tape{position:absolute;top:-12px;left:50%;width:90px;height:26px;background:rgba(255,143,205,.75);transform:translateX(-50%) rotate(-4deg)}
+.polaroid span{position:absolute;bottom:10px;right:14px;font-family:var(--script);font-size:22px;color:#2B1A24;transform:rotate(-6deg)}
+
+/* staying */
+.staying{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:14px;padding-bottom:48px}
+.stay-main{position:relative;min-height:380px;border-radius:18px;overflow:hidden;background:linear-gradient(135deg,#3A1A2C,#1A0D16);border:1px solid var(--line);display:flex;align-items:flex-end}
+.stay-main img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.stay-main::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(23,11,20,.92) 0%,rgba(23,11,20,.6) 45%,rgba(23,11,20,0) 75%)}
+.stay-copy{position:relative;z-index:2;padding:30px;max-width:420px}
+.stay-copy p{color:var(--muted);margin:12px 0 18px;font-size:15.5px}
+.stay-copy ul{list-style:none;padding:0;margin:0 0 20px;display:flex;flex-wrap:wrap;gap:8px}
+.stay-copy li{font-size:13px;padding:5px 11px;border-radius:999px;border:1px solid var(--line);background:rgba(23,11,20,.6)}
+.score{font-family:var(--display);font-size:20px;color:#fff;margin:0 0 4px}
+.score b{color:var(--neon-soft);font-weight:400}
+.thumbs{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.th{position:relative;border-radius:14px;overflow:hidden;background:linear-gradient(135deg,#3A1A2C,#24121E);border:1px solid var(--line);min-height:150px;display:flex;align-items:flex-end}
+.th img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.th span{position:relative;z-index:1;margin:8px;font-size:12px;padding:4px 9px;border-radius:999px;background:rgba(23,11,20,.75)}
+
+/* trio */
+.trio{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;padding-bottom:48px}
+.card{background:linear-gradient(180deg,var(--panel-2),var(--panel));border:1px solid var(--line);border-radius:18px;padding:26px;display:flex;flex-direction:column}
+.card-h{display:flex;gap:14px;align-items:center;margin-bottom:16px}
+.card-h svg{width:40px;height:40px;flex:none;color:var(--neon-soft);filter:drop-shadow(0 0 6px rgba(255,62,165,.7))}
+.card-h h2{font-size:clamp(26px,2.3vw,34px);overflow-wrap:anywhere}
+.itin{list-style:none;margin:0;padding:0;background:var(--paper);border-radius:12px;color:var(--dark-ink);overflow:hidden}
+.itin li{display:grid;grid-template-columns:64px minmax(0,1fr);gap:12px;padding:10px 12px;border-bottom:1px solid #F0C6D8;align-items:center}
+.itin li:last-child{border-bottom:0}
+.itin .d{font-family:var(--display);font-size:13px;letter-spacing:.04em;background:var(--blush);color:#A0145C;border-radius:6px;padding:4px 6px;text-align:center}
+.itin b{display:block;font-family:var(--display);font-weight:400;text-transform:uppercase;font-size:14.5px;letter-spacing:.03em}
+.itin small{font-size:13px;color:#6A5462}
+.itin li.bday{background:#FFE0EE}
+.itin li.bday small{color:#D81B7A;font-weight:600}
+.card p{color:var(--muted);margin:0 0 14px;font-size:15.5px}
+.van{margin-top:auto;padding-top:10px}
+.van svg{width:100%;height:auto;filter:drop-shadow(0 0 16px rgba(255,62,165,.45))}
+.route{display:flex;align-items:center;gap:10px;font-family:var(--display);text-transform:uppercase;letter-spacing:.04em;font-size:18px;margin:6px 0 14px}
+.route i{flex:1;height:2px;background:repeating-linear-gradient(90deg,var(--neon) 0 8px,transparent 8px 14px)}
+.dmg{list-style:none;margin:0;padding:0;background:var(--paper);border-radius:12px;color:var(--dark-ink);overflow:hidden}
+.dmg li{display:grid;grid-template-columns:28px minmax(0,1fr) auto;gap:10px;align-items:center;padding:11px 14px;border-bottom:1px solid #F0C6D8}
+.dmg li svg{width:22px;height:22px;color:#2B1A24}
+.dmg li b{font-family:var(--display);font-weight:400;text-transform:uppercase;font-size:14px;letter-spacing:.03em;display:block}
+.dmg li small{display:block;font-size:12px;color:#6A5462}
+.dmg li strong{font-size:16px}
+.dmg li.total{background:linear-gradient(180deg,#FF6BBA,#FF2E96);color:#fff;border:0}
+.dmg li.total b{font-size:15px}
+.est{font-family:var(--body);font-size:10px;font-weight:700;background:#FFD3EA;color:#A0145C;padding:2px 6px;border-radius:999px;margin-left:6px;vertical-align:2px;text-transform:none;letter-spacing:0}
+.own{margin:14px 0 0;font-size:13.5px;color:var(--muted)}
+.own b{color:var(--ink)}
+.card .btn{margin-top:16px;align-self:flex-start}
+
+/* datw */
+.datw{position:relative;border:1.5px solid var(--neon);border-radius:22px;padding:36px;margin-bottom:48px;background:linear-gradient(135deg,rgba(255,62,165,.14),rgba(23,11,20,.4) 50%),var(--night-2);box-shadow:0 0 40px rgba(255,62,165,.18)}
+.datw-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.3fr);gap:36px;align-items:start}
+.datw .lede{color:var(--muted);margin:14px 0 0;max-width:42ch}
+.adm{display:grid;gap:14px}
+.adm > div{display:grid;grid-template-columns:44px minmax(0,1fr);gap:14px;padding:16px;background:rgba(23,11,20,.55);border:1px solid var(--line);border-radius:14px}
+.adm svg{width:30px;height:30px;color:var(--neon-soft)}
+.adm h3{margin:0 0 4px;font-family:var(--display);font-weight:400;text-transform:uppercase;letter-spacing:.04em;font-size:19px}
+.adm p{margin:0;color:var(--muted);font-size:15.5px}
+.adm p strong{color:#fff}
+.stops{list-style:none;padding:0;margin:22px 0 0;display:flex;flex-wrap:wrap;gap:8px;counter-reset:c}
+.stops li{counter-increment:c;font-size:14px;padding:6px 12px 6px 8px;border-radius:999px;border:1.5px dashed var(--neon);color:#FFE3F1;display:inline-flex;gap:8px;align-items:center}
+.stops li::before{content:counter(c);font-family:var(--display);font-size:12px;width:20px;height:20px;border-radius:50%;background:var(--neon);color:#fff;display:inline-flex;align-items:center;justify-content:center}
+
+/* pay */
+.pay{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:20px;padding-bottom:48px}
+.calc{background:linear-gradient(180deg,#22101C,#170B14);border:1.5px solid var(--neon);border-radius:18px;padding:28px;box-shadow:0 0 30px rgba(255,62,165,.25)}
+.calc h3,.how h3{margin:0 0 6px;font-family:var(--display);font-weight:400;text-transform:uppercase;letter-spacing:.04em;font-size:24px}
+.calc p{margin:0 0 12px;color:var(--muted);font-size:15px}
+.big{font-family:var(--display);font-size:clamp(60px,7vw,86px);line-height:1;color:#FFE3F1;text-shadow:0 0 16px rgba(255,62,165,.8)}
+.big small{font-family:var(--body);font-size:16px;color:var(--muted);text-shadow:none}
+.calc input[type=range]{width:100%;accent-color:#FF3EA5;margin:18px 0 6px}
+.rl{display:flex;justify-content:space-between;font-size:13px;color:var(--muted)}
+.sched{list-style:none;margin:20px 0 0;padding:0;counter-reset:s}
+.sched li{counter-increment:s;display:grid;grid-template-columns:30px minmax(0,1fr) auto;gap:10px;padding:12px 0;border-top:1px solid var(--line);align-items:baseline}
+.sched li::before{content:counter(s);font-family:var(--display);font-size:20px;color:var(--neon)}
+.sched b{display:block;font-weight:600}
+.sched small{color:var(--muted)}
+.how{background:var(--paper);color:var(--dark-ink);border-radius:18px;padding:28px}
+.how dl{margin:12px 0 0;display:grid;grid-template-columns:auto minmax(0,1fr);gap:10px 18px}
+.how dt{color:#6A5462}
+.how dd{margin:0;font-weight:700;word-break:break-word}
+.how p{font-size:14.5px;color:#4A3742;margin:16px 0 0}
+.how .memo{display:inline-block;background:#FFD3EA;color:#A0145C;padding:2px 8px;border-radius:6px;font-weight:700}
+
+/* who */
+.who{position:relative;background:linear-gradient(180deg,#F9D3E3,#F3BDD3);color:var(--dark-ink);border-radius:26px 26px 0 0;padding:44px 0 56px}
+.who-top{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.5fr);gap:30px;align-items:center}
+.who h2 .a{display:block;font-family:var(--display);font-weight:400;text-transform:uppercase;font-size:clamp(36px,4vw,52px);line-height:.9;color:var(--dark-ink)}
+.who h2 .b{display:block;font-family:var(--display);font-weight:400;text-transform:uppercase;font-size:clamp(50px,6vw,80px);line-height:.9;color:#E0156F;text-shadow:3px 3px 0 #fff}
+.who-top > div > p{margin:12px 0 0;font-size:17px;max-width:34ch}
+.tallybar{display:flex;flex-wrap:wrap;align-items:center;gap:18px;background:rgba(255,255,255,.55);border-radius:18px;padding:18px 22px}
+.tallybar .n{font-family:var(--display);font-size:clamp(56px,7vw,80px);line-height:1;color:var(--dark-ink)}
+.tallybar .l{font-family:var(--display);text-transform:uppercase;font-size:16px;letter-spacing:.03em;line-height:1.15;max-width:12ch}
+.faces{display:flex;margin-left:auto;align-items:center}
+.face{width:52px;height:52px;border-radius:50%;margin-left:-12px;border:3px solid #fff;background:linear-gradient(135deg,#FF6BBA,#A0145C);color:#fff;display:flex;align-items:center;justify-content:center;font-family:var(--display);font-size:18px;letter-spacing:.02em}
+.face:first-child{margin-left:0}
+.face.more{background:#2B1A24}
+.faces-cap{font-family:var(--script);font-size:24px;color:#2B1A24;margin-left:12px;transform:rotate(-6deg)}
+.choices{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:22px}
+.choice{font:700 16px/1.2 var(--body);padding:18px;border-radius:14px;border:2px solid transparent;cursor:pointer;text-transform:uppercase;letter-spacing:.02em}
+.choice.c1{background:linear-gradient(180deg,#FF6BBA,#FF2E96);color:#fff;box-shadow:0 8px 20px rgba(224,21,111,.35)}
+.choice.c2,.choice.c3{background:rgba(255,255,255,.6);color:var(--dark-ink);border-color:rgba(43,26,36,.12)}
+.choice[aria-pressed="true"]{border-color:#2B1A24;outline:none}
+.panel{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.2fr);gap:24px;margin-top:22px;align-items:start}
+.form{background:#fff;border-radius:18px;padding:24px;box-shadow:0 18px 40px rgba(160,20,92,.15)}
+.form[hidden]{display:none}
+.form h3{margin:0 0 4px;font-family:var(--display);font-weight:400;text-transform:uppercase;font-size:26px;letter-spacing:.02em}
+.form > p{margin:0 0 16px;color:#6A5462;font-size:14.5px}
+.f{display:grid;gap:6px;margin-bottom:12px}
+.f label{font-size:14px;font-weight:600}
+.f input,.f textarea{font:inherit;font-size:16px;color:var(--dark-ink);background:#FDF2F7;border:1.5px solid #F0C6D8;border-radius:10px;padding:11px 12px;width:100%}
+.f input:focus,.f textarea:focus{outline:none;border-color:#E0156F}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.msg{font-size:14px;margin-top:10px;min-height:1.2em}
+.msg.err{color:#B3261E}.msg.ok{color:#A0145C;font-weight:700}
+.notice{font-size:14px;padding:10px 12px;border-radius:10px;background:#FFE0EE;margin-bottom:14px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px}
+.chip{font-size:13.5px;padding:6px 12px;border-radius:999px;background:rgba(255,255,255,.65)}
+.chip b{font-family:var(--display);font-weight:400;font-size:17px;margin-right:4px}
+.roster{list-style:none;margin:0;padding:0;background:rgba(255,255,255,.6);border-radius:18px;overflow:hidden}
+.roster li{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:2px 12px;padding:14px 18px;border-bottom:1px solid rgba(43,26,36,.08);align-items:center}
+.roster li:last-child{border-bottom:0}
+.roster .nm{font-weight:700;font-size:17px}
+.roster .meta{font-size:13.5px;color:#6A5462;grid-column:1}
+.roster .note{grid-column:1/-1;font-family:var(--script);font-size:22px;color:#A0145C;line-height:1.2;margin-top:2px}
+.st{grid-row:1;grid-column:2;font-size:12.5px;font-weight:700;padding:5px 11px;border-radius:999px;white-space:nowrap}
+.st.thinking{background:#E9E4EA;color:#4A3742}
+.st.coins{background:#FFF1C9;color:#7A5300}
+.st.pending{background:#FFD3EA;color:#A0145C;border:1.5px dashed #E0156F}
+.st.in{background:#E0156F;color:#fff}
+.st.paid{background:#2B1A24;color:#FF8FCD}
+.empty{padding:22px 18px;color:#6A5462}
+.empty strong{display:block;font-family:var(--display);font-weight:400;text-transform:uppercase;font-size:22px;color:var(--dark-ink)}
+
+/* faq */
+.faq{background:#120910;padding:56px 0}
+.faq-grid{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.6fr);gap:36px}
+details{border-bottom:1px solid var(--line);padding:4px 0}
+summary{cursor:pointer;list-style:none;display:flex;justify-content:space-between;gap:16px;padding:16px 0;font-weight:600;font-size:18px}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"+";font-family:var(--display);font-size:24px;color:var(--neon);line-height:1}
+details[open] summary::after{content:"–"}
+details p{margin:0 0 18px;color:var(--muted);max-width:62ch}
+footer{text-align:center;padding:34px 20px 40px;background:#120910;color:var(--muted);font-size:14px;border-top:1px solid var(--line)}
+footer .logo{display:block;font-size:44px;margin-bottom:6px}
+
+@media (max-width:1020px){
+  .links{display:none}
+  .nav .btn{margin-left:auto}
+  .hero .wrap{grid-template-columns:minmax(0,1fr) minmax(0,1.3fr)}
+  .signs{grid-column:1/-1;display:flex;flex-wrap:wrap;justify-content:center;gap:10px}
+  .signs::before{display:none}
+  .signs li,.signs li:nth-child(even),.signs li:nth-child(odd){transform:none;font-size:16px}
+  .tiles{grid-template-columns:repeat(4,minmax(0,1fr))}
+  .row3{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+  .polaroid{display:none}
+  .trio{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+  .trio .card:last-child{grid-column:1/-1}
+}
+@media (max-width:720px){
+  .hero .wrap{grid-template-columns:minmax(0,1fr);min-height:0}
+  .hero-photo{min-height:380px}
+  .hero-photo img{-webkit-mask-image:linear-gradient(180deg,#000 70%,transparent 100%);mask-image:linear-gradient(180deg,#000 70%,transparent 100%)}
+  .hero-copy{margin-top:-90px}
+  .passport{width:96px}
+  .tiles{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .tiles .tile:last-child{grid-column:1/-1}
+  .row3,.staying,.trio,.datw-grid,.pay,.who-top,.panel,.faq-grid{grid-template-columns:minmax(0,1fr)}
+  .trio .card:last-child{grid-column:auto}
+  .datw{padding:24px}
+  .choices{grid-template-columns:minmax(0,1fr)}
+  .faces{margin-left:0}
+  .stay-main::after{background:linear-gradient(0deg,rgba(23,11,20,.95) 0%,rgba(23,11,20,.5) 60%,rgba(23,11,20,.1) 100%)}
+}
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="i-road" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3 4 21M16 3l4 18M12 4v3M12 10v3M12 16v3"/></symbol>
+    <symbol id="i-house" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11 12 4l9 7"/><path d="M5 10v10h14V10"/><path d="M10 20v-5h4v5"/></symbol>
+    <symbol id="i-van" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M2 16V8a2 2 0 0 1 2-2h11l5 4 2 1v5h-2"/><path d="M2 16h3M10 16h5"/><circle cx="7.5" cy="16.5" r="2"/><circle cx="17.5" cy="16.5" r="2"/><path d="M5 9h4M11 9h4"/></symbol>
+    <symbol id="i-globe" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3.5 3 14.5 0 18M12 3c-3 3.5-3 14.5 0 18"/></symbol>
+    <symbol id="i-cake" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21V13h16v8M3 21h18M4 16c2 1.5 4 1.5 5.3 0 1.4 1.5 4 1.5 5.4 0 1.3 1.5 3.3 1.5 5.3 0"/><path d="M8 13V10M12 13V10M16 13V10M8 7v.5M12 6v.5M16 7v.5"/></symbol>
+    <symbol id="i-people" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3"/><circle cx="5" cy="10" r="2.2"/><circle cx="19" cy="10" r="2.2"/><path d="M7 20c0-3 2.2-5 5-5s5 2 5 5M1.5 19c0-2.2 1.5-3.8 3.5-3.8M22.5 19c0-2.2-1.5-3.8-3.5-3.8"/></symbol>
+    <symbol id="i-spark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/><path d="M19 15l.7 2 2 .7-2 .7-.7 2-.7-2-2-.7 2-.7z"/></symbol>
+    <symbol id="i-cal" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></symbol>
+    <symbol id="i-pin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></symbol>
+    <symbol id="i-money" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6l-1.5 3h-3z"/><path d="M10.5 6C6 8 4 12 4 15.5 4 19 7 21 12 21s8-2 8-5.5C20 12 18 8 13.5 6"/><path d="M14 11.5c-.4-.6-1.1-1-2-1-1.2 0-2 .6-2 1.4 0 2 4 1 4 3 0 .9-.9 1.5-2 1.5-.9 0-1.7-.4-2.1-1M12 9.5v1M12 16.4v1"/></symbol>
+    <symbol id="i-ticket" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8a2 2 0 0 0 2-2h14a2 2 0 0 0 2 2v2a2 2 0 0 0 0 4v2a2 2 0 0 0-2 2H5a2 2 0 0 0-2-2v-2a2 2 0 0 0 0-4z"/><path d="M14 6v12" stroke-dasharray="2 2"/></symbol>
+    <symbol id="i-glass" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16l-8 9z"/><path d="M12 13v7M8 20h8M15 7.5l3-5"/></symbol>
+    <symbol id="i-cart" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 4h2l2.4 11h10.2L20 7H6.2"/><circle cx="9" cy="19" r="1.5"/><circle cx="17" cy="19" r="1.5"/></symbol>
+    <symbol id="i-id" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="11" r="2.2"/><path d="M5.5 16c.6-1.6 2-2.5 3.5-2.5s2.9.9 3.5 2.5M15 10h3.5M15 13.5h3.5"/></symbol>
+  </defs>
+</svg>
+
+<nav class="nav" aria-label="Main">
+  <div class="wrap">
+    <a class="logo" href="#top">Bri's 21</a>
+    <div class="links">
+      <a href="#trip">The trip</a>
+      <a href="#staying">Where we staying</a>
+      <a href="#doing">What we doing</a>
+      <a href="#datw">Around the world</a>
+      <a href="#damage">The damage</a>
+      <a href="#who">Who all over there?</a>
+      <a href="#faq">FAQs</a>
+    </div>
+    <a class="btn hot" href="#who" data-pick="pending">Lock in</a>
+  </div>
+</nav>
+
+<header class="hero" id="top">
+  <div class="wrap">
+    <div class="hero-photo">
+      <img src="images/bri-1.jpg" alt="Bri, the birthday girl">
+      <div class="tag">Same girl,<br>bigger passport</div>
+      <div class="passport" aria-hidden="true"><b>PASSPORT</b><svg><use href="#i-globe"/></svg><i>Around the World</i></div>
+    </div>
+    <div class="hero-copy">
+      <svg class="crown" viewBox="0 0 64 40" aria-hidden="true"><path d="M4 34 8 8l14 14L32 4l10 18L56 8l4 26z" fill="none" stroke="#FF8FCD" stroke-width="3" stroke-linejoin="round"/><circle cx="8" cy="7" r="3" fill="#FF8FCD"/><circle cx="32" cy="3.5" r="3" fill="#FF8FCD"/><circle cx="56" cy="7" r="3" fill="#FF8FCD"/></svg>
+      <h1 class="title"><span class="bri chrome">BRI'S</span><span class="num neon">21st</span></h1>
+      <p class="subt">Around the world</p>
+      <p class="subt2">&amp; into 21</p>
+      <div class="facts-row">
+        <span><svg><use href="#i-cal"/></svg>Feb 5–10, 2027</span>
+        <span><svg><use href="#i-pin"/></svg>Austin to Kissimmee, FL</span>
+      </div>
+      <p class="blurb">A big family road trip. A bigger celebration. We're taking over a house near Disney for Bri's 21st, and on <strong>Tuesday, February 9th, we drink around the world.</strong></p>
+      <div class="cta-row">
+        <a class="btn soft" href="#trip">Trip details</a>
+        <a class="btn out" href="#who">Who all over there?</a>
+        <a class="btn hot" href="#who" data-pick="pending">Lock in now</a>
+      </div>
+    </div>
+    <ul class="signs" aria-label="The eleven World Showcase countries">
+      <li>Mexico</li><li>Norway</li><li>China</li><li>Germany</li><li>Italy</li><li>America</li><li>Japan</li><li>Morocco</li><li>France</li><li>UK</li><li>Canada</li>
+    </ul>
+  </div>
+</header>
+
+<main>
+  <div class="wrap">
+    <div class="tiles" id="trip">
+      <div class="tile"><svg><use href="#i-road"/></svg><span>Big family<br>road trip</span></div>
+      <div class="tile"><svg><use href="#i-house"/></svg><span>9-bedroom<br>house</span></div>
+      <div class="tile"><svg><use href="#i-van"/></svg><span>20-passenger<br>van + driver</span></div>
+      <div class="tile"><svg><use href="#i-globe"/></svg><span>Drink around<br>the world</span></div>
+      <div class="tile"><svg><use href="#i-cake"/></svg><span>Bri turns 21<br>Feb 9th</span></div>
+      <div class="tile"><svg><use href="#i-people"/></svg><span>Good people<br>good vibes</span></div>
+      <div class="tile"><svg><use href="#i-spark"/></svg><span>Shopping day<br>+ nights out</span></div>
+    </div>
+
+    <div class="row3">
+      <div class="paper">
+        <div class="stamp" aria-hidden="true">Austin<br>to<br>Kissimmee<br>2027</div>
+        <h2><span class="a">The</span><span class="b">assignment</span></h2>
+        <p>Liiisten. Our girl asked for one thing for her 21st: Drink Around the World at EPCOT. So we're not doing it small.</p>
+        <p>Get the family to Kissimmee. Take over a big house. Ride together in one van so nobody has to drive. And on February 9th, we drink around the world.</p>
+        <p>I'm not playing games with the money, either. Every number and every due date is on this page, and the more of us that lock in, the cheaper the van gets for everybody.</p>
+        <p class="sig" id="sig">Dani</p>
+      </div>
+      <div class="count" aria-live="off">
+        <h3>Countdown to roll out</h3>
+        <div class="cd"><div><b id="cdD">0</b><span>Days</span></div><div><b id="cdH">0</b><span>Hours</span></div><div><b id="cdM">0</b><span>Minutes</span></div><div><b id="cdS">0</b><span>Seconds</span></div></div>
+        <p id="cdNote">Van leaves Austin Thursday night, Feb 4</p>
+      </div>
+      <div class="polaroid"><div class="tape" aria-hidden="true"></div><img src="images/bri-2.jpg" alt="Bri"><span>21 looks good on me</span></div>
+    </div>
+  </div>
+
+  <section class="wrap" id="staying" aria-labelledby="stayH">
+    <div class="staying">
+      <div class="stay-main" id="stayMain">
+        <div class="stay-copy">
+          <h2 class="sec" id="stayH"><span class="chrome">Where we</span><span class="neon">staying</span></h2>
+          <p>A nine-bedroom vacation home at Encore Resort at Reunion, close to Disney, with room for the whole family.</p>
+          <p class="score"><b>9.8</b> / 10 from 60 guest reviews</p>
+          <ul><li>9 bedrooms</li><li>Private pool</li><li>Game room</li><li>Themed kids' rooms</li><li>2 washers</li></ul>
+          <a class="btn hot" id="vrboLink" href="#" target="_blank" rel="noopener">View the house</a>
+        </div>
+      </div>
+      <div class="thumbs" id="thumbs"></div>
+    </div>
+  </section>
+
+  <div class="wrap">
+    <div class="trio">
+      <section class="card" id="doing" aria-labelledby="doH">
+        <div class="card-h"><svg><use href="#i-cal"/></svg><h2 class="sec" id="doH"><span class="chrome">What we</span><span class="neon">doing</span></h2></div>
+        <ul class="itin">
+          <li><span class="d">FEB 4</span><div><b>Roll out from Austin</b><small>Load the van Thursday night, ride through</small></div></li>
+          <li><span class="d">FEB 5</span><div><b>Pull up, groceries, chill</b><small>Check in, stock the house, pool night</small></div></li>
+          <li><span class="d">FEB 6</span><div><b>Fun day + night out</b><small>Pool by day, out on the town by night</small></div></li>
+          <li><span class="d">FEB 7</span><div><b>Mall + shopping day</b><small>Outlets, the mall, bring your card</small></div></li>
+          <li><span class="d">FEB 8</span><div><b>Birthday eve</b><small>Disney Springs, midnight toast</small></div></li>
+          <li class="bday"><span class="d">FEB 9</span><div><b>EPCOT: Drink Around the World</b><small>Bri turns 21!</small></div></li>
+          <li><span class="d">FEB 10</span><div><b>Check out &amp; ride home</b><small>Back in Austin Thursday, Feb 11</small></div></li>
+        </ul>
+      </section>
+
+      <section class="card" id="ride" aria-labelledby="rideH">
+        <div class="card-h"><svg><use href="#i-van"/></svg><h2 class="sec chrome" id="rideH">Transportation</h2></div>
+        <div class="route"><span>Austin</span><i aria-hidden="true"></i><span>Kissimmee</span></div>
+        <p>We're renting a 20-passenger van with a professional driver. It's about 1,100 miles and roughly 16 hours each way, and none of it is on you.</p>
+        <p>The van stays with us all week for Disney Springs and EPCOT. Nobody drives, nobody parks, and on a drinking birthday, nobody is the designated driver.</p>
+        <div class="van" aria-hidden="true">
+          <svg viewBox="0 0 320 140"><defs><linearGradient id="vg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3B2433"/><stop offset="1" stop-color="#140A11"/></linearGradient></defs>
+            <path d="M20 108V48c0-10 8-18 18-18h170c8 0 14 3 19 8l38 36 26 8c8 2 13 9 13 17v9H20z" fill="url(#vg)" stroke="#FF3EA5" stroke-width="2"/>
+            <path d="M44 44h40v26H44zM92 44h40v26H92zM140 44h40v26h-40zM188 44h20l30 26h-50z" fill="#5A2F48" stroke="#FF8FCD" stroke-width="1.2"/>
+            <path d="M20 86h284" stroke="#FF3EA5" stroke-width="1" opacity=".6"/>
+            <circle cx="78" cy="110" r="17" fill="#0E070B" stroke="#FF8FCD" stroke-width="3"/><circle cx="78" cy="110" r="6" fill="#9A96A3"/>
+            <circle cx="252" cy="110" r="17" fill="#0E070B" stroke="#FF8FCD" stroke-width="3"/><circle cx="252" cy="110" r="6" fill="#9A96A3"/>
+            <rect x="292" y="92" width="14" height="6" rx="2" fill="#FFE3F1"/></svg>
+        </div>
+      </section>
+
+      <section class="card" id="damage" aria-labelledby="dmgH">
+        <div class="card-h"><svg><use href="#i-money"/></svg><h2 class="sec chrome" id="dmgH">The damage</h2></div>
+        <p>Per person, ages 9 and up. Kids under 9 are free for the house and van.</p>
+        <ul class="dmg" id="dmgList"></ul>
+        <p class="own" id="ownLine"></p>
+        <a class="btn hot" href="#pay">Pay your share</a>
+      </section>
+    </div>
+
+    <section class="datw" id="datw" aria-labelledby="datwH">
+      <div class="datw-grid">
+        <div>
+          <h2 class="sec" id="datwH"><span class="chrome">Drink around</span><span class="neon">the world</span></h2>
+          <p class="lede">Eleven countries around EPCOT's World Showcase, one drink in each, in order. Water between every stop. Kids and non-drinkers do the same walk with the snack booths, and everybody gets pictures.</p>
+          <ol class="stops" aria-label="Route in order">
+            <li>Mexico</li><li>Norway</li><li>China</li><li>Germany</li><li>Italy</li><li>America</li><li>Japan</li><li>Morocco</li><li>France</li><li>UK</li><li>Canada</li>
+          </ol>
+          <p style="margin-top:22px"><a class="btn hot tix" href="#" target="_blank" rel="noopener">Buy your EPCOT ticket</a></p>
+        </div>
+        <div class="adm">
+          <div><svg><use href="#i-ticket"/></svg><div><h3>Park ticket</h3><p>You only need a <a class="tix" href="#" target="_blank" rel="noopener">standard Walt Disney World theme park ticket</a> for EPCOT on <strong>Tuesday, Feb 9</strong>. Drink Around the World isn't a separate ticket. If you're using an annual pass, make a park reservation for that day too.</p></div></div>
+          <div><svg><use href="#i-glass"/></svg><div><h3>Drink costs</h3><p>You buy your own drink at each of the 11 country pavilions as you go.</p></div></div>
+          <div><svg><use href="#i-money"/></svg><div><h3>Total budget</h3><p>Plan on about <strong id="datwBudget">$120–$160</strong> per person for one alcoholic drink at all 11 stops.</p></div></div>
+          <div><svg><use href="#i-id"/></svg><div><h3>Bring your ID</h3><p>Everybody drinking needs to be 21 and carry a photo ID. They will card you.</p></div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="pay" id="pay" aria-label="Paying your share">
+      <div class="calc">
+        <h3>Your share</h3>
+        <p>Your $<span id="houseAmt">150</span> house share plus your cut of the van. Drag to see what happens to the van cost when more people come.</p>
+        <div class="big" id="shareBig">—<small> per person</small></div>
+        <input type="range" id="shareRange" min="6" max="30" step="1" aria-label="Number of people splitting the van">
+        <div class="rl"><span id="rangeLabel"></span><span id="liveLabel"></span></div>
+        <ol class="sched" id="sched"></ol>
+      </div>
+      <div class="how">
+        <h3>How to pay</h3>
+        <dl id="payList"></dl>
+        <p>Put <span class="memo" id="memo"></span> in the memo so we can match it to you. Your status on the list updates once we log it.</p>
+        <p id="policy"></p>
+      </div>
+    </section>
+  </div>
+
+  <section class="who" id="who" aria-labelledby="whoH">
+    <div class="wrap">
+      <div class="who-top">
+        <div>
+          <h2 id="whoH"><span class="a">Who all</span><span class="b">over there?</span></h2>
+          <p>Because I need to know who all coming before I say I'm coming.</p>
+        </div>
+        <div class="tallybar">
+          <span class="n" id="tallyN">0</span>
+          <span class="l">People said they're outside</span>
+          <span class="faces" id="faces"></span>
+          <span class="faces-cap">the crew so far</span>
+        </div>
+      </div>
+      <div class="choices" role="group" aria-label="Where's your head at?">
+        <button class="choice c1" type="button" data-status="pending" aria-pressed="false">I'm coming</button>
+        <button class="choice c2" type="button" data-status="thinking" aria-pressed="false">I'm interested</button>
+        <button class="choice c3" type="button" data-status="coins" aria-pressed="false">Lemme check my coins</button>
+      </div>
+      <div class="panel">
+        <form class="form" id="rsvp" novalidate hidden>
+          <h3 id="formH">Put your name on it</h3>
+          <p id="formSub">No payment here. This just puts you on the list.</p>
+          <div class="notice" id="modeNotice" hidden></div>
+          <div class="f"><label for="nm">Your name (how the family knows you)</label><input id="nm" name="name" maxlength="60" autocomplete="name" required></div>
+          <div class="row2">
+            <div class="f"><label for="gu">People 9 and up</label><input id="gu" name="guests" type="number" min="1" max="12" value="1" inputmode="numeric"></div>
+            <div class="f"><label for="kd">Kids under 9 (free)</label><input id="kd" name="kids" type="number" min="0" max="12" value="0" inputmode="numeric"></div>
+          </div>
+          <div class="f"><label for="nt">A note for Bri (optional)</label><textarea id="nt" name="note" rows="2" maxlength="140"></textarea></div>
+          <button class="btn hot" type="submit" id="sendBtn" style="width:100%">Add me to the list</button>
+          <div class="msg" id="formMsg" role="status" aria-live="polite"></div>
+        </form>
+        <div id="listSide">
+          <div class="chips" id="chips"></div>
+          <ul class="roster" id="roster"></ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="faq" id="faq" aria-labelledby="faqH">
+    <div class="wrap faq-grid">
+      <h2 class="sec" id="faqH"><span class="chrome">Questions</span><span class="neon">answered</span></h2>
+      <div>
+        <details><summary>Do I need a special ticket for Drink Around the World?</summary><p>No. A standard theme park ticket for EPCOT on Feb 9 is all you need, and you buy drinks as you go. Annual passholders also need a park reservation for that day.</p></details>
+        <details><summary>Can people under 21 come to EPCOT?</summary><p>Yes. Anyone with a park ticket can come. You just have to be 21 with a photo ID to buy or drink alcohol. Under-21s walk the same route, hit the food booths, and are in every picture. And no passing drinks to anybody under 21. Disney watches for that.</p></details>
+        <details><summary>Do kids pay?</summary><p>Kids under 9 are free for the house and the van. Anyone going into EPCOT still needs a park ticket, and Disney is free for kids under 3.</p></details>
+        <details><summary>When is everything due?</summary><p id="faqDue"></p></details>
+        <details><summary>Is there a payment plan?</summary><p>Yes. It's broken into three payments: your house share as the deposit, then your van share in two halves.</p></details>
+        <details><summary>What if I pay and then can't make it?</summary><p id="faqPolicy"></p></details>
+        <details><summary>Can I drive myself instead of riding in the van?</summary><p>Talk to Dani first. The van is split between everybody riding, so we need to know before the van gets booked.</p></details>
+        <details><summary>What should I pack?</summary><p>Swimsuit, comfortable walking shoes for EPCOT, a pillow and blanket for the ride, your birthday fit, and your photo ID if you're drinking.</p></details>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer><span class="logo">Bri's 21</span>Made with love for Bri. Questions about the trip? Text Dani.</footer>
+
+<script src="config.js"></script>
+<script>
+const $ = s => document.querySelector(s);
+const money = n => "$" + Math.round(n).toLocaleString("en-US");
+const STATUS = {
+  paid:     { label: "Paid in full", order: 0, outside: true },
+  in:       { label: "Locked in", order: 1, outside: true },
+  pending:  { label: "Coming", order: 2, outside: true },
+  coins:    { label: "Checking coins", order: 3 },
+  thinking: { label: "Interested", order: 4 }
+};
+const ICON = k => `<svg><use href="#i-${k}"/></svg>`;
+
+/* static fill */
+$("#vrboLink").href = CONFIG.vrboUrl;
+document.querySelectorAll("a.tix").forEach(a => a.href = CONFIG.ticketsUrl);
+$("#sig").textContent = CONFIG.signature;
+$("#memo").textContent = CONFIG.memo;
+$("#policy").textContent = CONFIG.policy;
+$("#faqPolicy").textContent = CONFIG.policy;
+$("#houseAmt").textContent = CONFIG.housePerPerson;
+$("#datwBudget").textContent = CONFIG.datwBudget;
+$("#faqDue").textContent = CONFIG.schedule.map(s => `${s.what}: ${s.due}`).join(". ") + ".";
+CONFIG.pay.forEach(p => {
+  const dt = document.createElement("dt"); dt.textContent = p.label;
+  const dd = document.createElement("dd"); dd.textContent = p.value;
+  $("#payList").append(dt, dd);
+});
+(function photos(){
+  const [main, ...rest] = HOUSE_PHOTOS;
+  const mi = new Image(); mi.alt = ""; mi.src = main.src; mi.onerror = () => mi.remove();
+  $("#stayMain").prepend(mi);
+  rest.slice(0, 4).forEach(p => {
+    const d = document.createElement("div"); d.className = "th";
+    const img = new Image(); img.alt = p.cap; img.loading = "lazy"; img.src = p.src; img.onerror = () => img.remove();
+    const c = document.createElement("span"); c.textContent = p.cap;
+    d.append(img, c); $("#thumbs").append(d);
+  });
+})();
+
+/* countdown */
+(function countdown(){
+  const target = new Date(CONFIG.departure).getTime();
+  const pad = n => String(n).padStart(2, "0");
+  function tick(){
+    let s = Math.max(0, Math.floor((target - Date.now()) / 1000));
+    if (s === 0) { $("#cdNote").textContent = "We're on the road. Happy birthday, Bri!"; }
+    $("#cdD").textContent = Math.floor(s / 86400); s %= 86400;
+    $("#cdH").textContent = pad(Math.floor(s / 3600)); s %= 3600;
+    $("#cdM").textContent = pad(Math.floor(s / 60));
+    $("#cdS").textContent = pad(s % 60);
+  }
+  tick(); setInterval(tick, 1000);
+})();
+
+/* money */
+const vanShare = n => CONFIG.vanTotal / Math.max(1, n);
+const shareFor = n => CONFIG.housePerPerson + vanShare(n);
+let committedPayers = 0;
+function renderMoney(){
+  const n = committedPayers >= CONFIG.minPayersForDisplay ? committedPayers : CONFIG.minPayersForDisplay;
+  const est = CONFIG.vanIsEstimate ? '<span class="est">estimate</span>' : "";
+  $("#dmgList").innerHTML = `
+    <li>${ICON("house")}<div><b>Vacation home (5 nights)</b><small>Flat rate per person</small></div><strong>${money(CONFIG.housePerPerson)}</strong></li>
+    <li>${ICON("van")}<div><b>Van + driver${est}</b><small>${money(CONFIG.vanTotal)} split ${n} ways</small></div><strong>${money(vanShare(n))}</strong></li>
+    <li class="total"><span></span><div><b>Paid to us, per person</b></div><strong>${money(shareFor(n))}</strong></li>
+    <li>${ICON("ticket")}<div><b>EPCOT ticket</b><small>Buy your own on Disney's site</small></div><strong>~${money(CONFIG.epcotTicket)}</strong></li>
+    <li>${ICON("glass")}<div><b>Drinks, 11 countries</b><small>Your liver, your budget</small></div><strong>${CONFIG.datwBudget}</strong></li>`;
+  $("#ownLine").innerHTML = "<b>Also on you:</b> road food and spending money.";
+
+  const sc = $("#sched"); sc.innerHTML = "";
+  CONFIG.schedule.forEach(s => {
+    const amt = s.amount === "house" ? CONFIG.housePerPerson : s.amount === "vanHalf" ? vanShare(n) / 2 : s.amount;
+    const li = document.createElement("li");
+    li.innerHTML = "<div><b></b><small></small></div><strong></strong>";
+    li.querySelector("b").textContent = `${s.what}, due ${s.due}`;
+    li.querySelector("small").textContent = s.note;
+    li.querySelector("strong").textContent = money(amt);
+    sc.append(li);
+  });
+  const r = $("#shareRange");
+  if (!r.dataset.touched) r.value = n;
+  updateRange();
+}
+function updateRange(){
+  const v = +$("#shareRange").value;
+  $("#shareBig").innerHTML = money(shareFor(v)) + "<small> per person</small>";
+  $("#rangeLabel").textContent = v + " people splitting the van";
+  $("#liveLabel").textContent = committedPayers ? committedPayers + " locked in now" : "";
+}
+$("#shareRange").addEventListener("input", e => { e.target.dataset.touched = "1"; updateRange(); });
+
+/* data: Supabase */
+const Store = {
+  ready: false, items: [], onChange: () => {},
+  base(){ return CONFIG.supabase.url.replace(/\/$/, "") + "/rest/v1/" + CONFIG.supabase.table; },
+  headers(){ const k = CONFIG.supabase.anonKey; return { apikey: k, Authorization: "Bearer " + k, "Content-Type": "application/json" }; },
+  async init(){
+    if (!CONFIG.supabase.url || !CONFIG.supabase.anonKey) { this.onChange(); return; }
+    this.ready = true;
+    await this.load();
+    setInterval(() => { if (!document.hidden) this.load(); }, 30000);
+  },
+  async load(){
+    try {
+      const res = await fetch(this.base() + "?select=id,name,guests,kids,status,note,created_at&order=created_at.asc", { headers: this.headers() });
+      if (res.ok) { this.items = await res.json(); this.onChange(); }
+    } catch (e) {}
+  },
+  async add(r){
+    if (!this.ready) throw new Error("offline");
+    const res = await fetch(this.base(), { method: "POST", headers: { ...this.headers(), Prefer: "return=minimal" }, body: JSON.stringify(r) });
+    if (!res.ok) throw new Error("save");
+    await this.load();
+  }
+};
+
+/* who */
+const heads = i => (+i.guests || 0) + (+i.kids || 0);
+function initials(name){
+  const p = String(name).trim().split(/\s+/);
+  return ((p[0] || "")[0] || "").toUpperCase() + ((p[1] || "")[0] || "").toUpperCase();
+}
+function render(){
+  const items = Store.items.filter(i => i && i.name);
+  const outside = items.filter(i => STATUS[i.status]?.outside);
+  committedPayers = items.filter(i => i.status === "in" || i.status === "paid").reduce((s, i) => s + (+i.guests || 0), 0);
+  $("#tallyN").textContent = outside.reduce((s, i) => s + heads(i), 0);
+
+  const faces = $("#faces"); faces.innerHTML = "";
+  outside.slice(0, 5).forEach(i => { const f = document.createElement("span"); f.className = "face"; f.textContent = initials(i.name); f.title = i.name; faces.append(f); });
+  if (outside.length > 5) { const m = document.createElement("span"); m.className = "face more"; m.textContent = "+" + (outside.length - 5); faces.append(m); }
+
+  const chips = $("#chips"); chips.innerHTML = "";
+  Object.entries(STATUS).forEach(([k, s]) => {
+    const n = items.filter(i => i.status === k).reduce((a, i) => a + heads(i), 0);
+    const c = document.createElement("span"); c.className = "chip";
+    c.innerHTML = "<b></b><span></span>"; c.querySelector("b").textContent = n; c.querySelector("span").textContent = s.label;
+    chips.append(c);
+  });
+
+  const ro = $("#roster"); ro.innerHTML = "";
+  if (!items.length) ro.innerHTML = '<li class="empty" style="display:block"><strong>Nobody yet. Somebody has to go first.</strong>Put your name down and watch everybody else follow.</li>';
+  items.slice().sort((a, b) => (STATUS[a.status]?.order ?? 9) - (STATUS[b.status]?.order ?? 9) || String(a.created_at).localeCompare(String(b.created_at)))
+    .forEach(i => {
+      const li = document.createElement("li");
+      const nm = document.createElement("div"); nm.className = "nm"; nm.textContent = i.name;
+      const st = document.createElement("span"); const key = STATUS[i.status] ? i.status : "thinking";
+      st.className = "st " + key; st.textContent = STATUS[key].label;
+      const meta = document.createElement("div"); meta.className = "meta";
+      const g = +i.guests || 0, k = +i.kids || 0;
+      meta.textContent = `${g} ${g === 1 ? "person" : "people"}${k ? `, plus ${k} little${k === 1 ? "" : "s"}` : ""}`;
+      li.append(nm, st, meta);
+      if (i.note) { const n = document.createElement("div"); n.className = "note"; n.textContent = i.note; li.append(n); }
+      ro.append(li);
+    });
+
+  const notice = $("#modeNotice");
+  notice.hidden = Store.ready;
+  if (!Store.ready) notice.textContent = "The list isn't connected yet. Text Dani to get added.";
+  renderMoney();
+}
+Store.onChange = render;
+
+/* choice buttons -> form */
+const COPY = {
+  pending:  ["Say less. You're coming.", "Add your name, then send your deposit by the due date."],
+  thinking: ["Interested? We see you.", "Put your name down. You can lock in later."],
+  coins:    ["Check them coins.", "No pressure. Get on the list so we can count you."]
+};
+let chosen = "pending";
+function pick(status, focus){
+  chosen = COPY[status] ? status : "pending";
+  document.querySelectorAll(".choice").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.status === chosen)));
+  $("#formH").textContent = COPY[chosen][0];
+  $("#formSub").textContent = COPY[chosen][1];
+  $("#rsvp").hidden = false;
+  if (focus) setTimeout(() => $("#nm").focus({ preventScroll: true }), 350);
+}
+document.querySelectorAll(".choice").forEach(b => b.addEventListener("click", () => pick(b.dataset.status, true)));
+document.querySelectorAll("[data-pick]").forEach(a => a.addEventListener("click", () => pick(a.dataset.pick, true)));
+
+$("#rsvp").addEventListener("submit", async e => {
+  e.preventDefault();
+  const f = e.target, msg = $("#formMsg"), btn = $("#sendBtn");
+  const name = f.name.value.trim();
+  if (!name) { msg.className = "msg err"; msg.textContent = "Add your name so the family knows who you are."; f.name.focus(); return; }
+  const r = {
+    name: name.slice(0, 60),
+    guests: Math.min(12, Math.max(1, parseInt(f.guests.value, 10) || 1)),
+    kids: Math.min(12, Math.max(0, parseInt(f.kids.value, 10) || 0)),
+    status: chosen,
+    note: f.note.value.trim().slice(0, 140)
+  };
+  btn.disabled = true; msg.className = "msg"; msg.textContent = "Adding you…";
+  try {
+    await Store.add(r);
+    msg.className = "msg ok";
+    msg.textContent = chosen === "pending" ? "You're on the list. Now go send that deposit." : "You're on the list. We see you.";
+    f.reset();
+  } catch (err) {
+    msg.className = "msg err"; msg.textContent = "That didn't save. Check your connection and try again, or text Dani.";
+  } finally { btn.disabled = false; }
+});
+
+render();
+Store.init();
+</script>
+</body>
+</html>
