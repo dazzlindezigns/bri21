@@ -73,7 +73,7 @@ An invitation, itinerary, and RSVP site for a family road trip celebrating Bri's
   - The rest of the van share, due Jan 10, 2027
   - Memo line: "BRI21 + your name"
   - Deposits are nonrefundable once the house is booked; people can transfer their spot.
-- **Capacity:** 20 spots total (van seats + house), every person counts including kids (`spots` in config). A spot is held once the deposit is logged (`in`/`paid`). The page pushes "RSVP and pay your deposit ASAP to hold your spot."
+- **Capacity:** 20 spots total for ages 9+; under 9 don't count (Dani: only a 2-year-old is coming) (`spots` in config). A spot is held once the deposit is logged (`in`/`paid`). The page pushes "RSVP and pay your deposit ASAP to hold your spot."
 - **Departure:** Thu Feb 4, 2027, around 8–9pm Central (countdown targets 8pm).
 - **Gifts:** "can't make it" gifts go toward the trip, not to Bri. People who want to gift Bri personally contact her directly.
 - **House photos:** Dani wants them hotlinked from the Vrbo listing (decided Oct 2026). Broken images already hide themselves.

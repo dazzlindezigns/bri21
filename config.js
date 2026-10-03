@@ -7,7 +7,7 @@ const CONFIG = {
   departure: "2027-02-04T20:00:00-06:00",   // countdown target (Austin time). Rolling out around 8 or 9pm
   vrboUrl: "https://www.vrbo.com/5425883",
   ticketsUrl: "https://disneyworld.disney.go.com/admission/tickets/",
-  spots: 20,                                // van seats + house spots. Every person counts, kids too. A spot is held once the deposit is logged
+  spots: 20,                                // spots for ages 9 and up (under 9 don't count). A spot is held once the deposit is logged
   housePerPerson: 150,                      // flat, ages 9+
   // Van: flat per-person ESTIMATE so the whole trip lands at $500/person (house $150 + van $350).
   // We're still shopping van rates. When a real quote comes in, change vanPerPerson

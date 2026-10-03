@@ -760,17 +760,17 @@ function render(){
 }
 Store.onChange = render;
 
-/* spots: everyone counts (kids too). Held = deposit logged (Locked in / Paid in full). */
+/* spots: only people 9 and up count (guests). Held = deposit logged (Locked in / Paid in full). */
 function renderSpots(items){
   const cap = CONFIG.spots;
-  const held = items.filter(i => i.status === "in" || i.status === "paid").reduce((s, i) => s + heads(i), 0);
-  const waiting = items.filter(i => i.status === "pending").reduce((s, i) => s + heads(i), 0);
+  const held = items.filter(i => i.status === "in" || i.status === "paid").reduce((s, i) => s + (+i.guests || 0), 0);
+  const waiting = items.filter(i => i.status === "pending").reduce((s, i) => s + (+i.guests || 0), 0);
   const left = Math.max(0, cap - held);
   $("#spotsBig").innerHTML = `<b>${Math.min(held, cap)}</b> of ${cap} spots held`;
   $("#spotsLeft").textContent = left ? `${left} left` : "Full";
   $("#spotsFill").style.width = Math.min(100, held / cap * 100) + "%";
   $("#spotsSub").innerHTML = left
-    ? `First come, first served. Your spot is held once your ${money(CONFIG.housePerPerson)} deposit is in.` + (waiting ? ` <strong>${waiting} ${waiting === 1 ? "person said they're" : "people said they're"} coming but ${waiting === 1 ? "hasn't" : "haven't"} sent a deposit yet.</strong> Don't let somebody take your seat.` : "")
+    ? `First come, first served. Your spot is held once your ${money(CONFIG.housePerPerson)} deposit is in. Little ones under 9 don't count toward the ${cap}.` + (waiting ? ` <strong>${waiting} ${waiting === 1 ? "person said they're" : "people said they're"} coming but ${waiting === 1 ? "hasn't" : "haven't"} sent a deposit yet.</strong> Don't let somebody take your seat.` : "")
     : "All spots are held. Put your name down anyway. If somebody drops, the next person on the list gets the call.";
   $("#spotsHero").innerHTML = left
     ? `Only <b>${cap} spots</b> on the van and in the house${held ? `, and <b>${left} left</b>` : ""}. RSVP and send your deposit ASAP to hold yours.`

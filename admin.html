@@ -295,9 +295,9 @@ function render(){
   $("#stillNeeded").textContent = money(Math.max(0, expected - total));
   $("#shareLine").textContent = `${heads} paying ${heads === 1 ? "head" : "heads"} × ${money(m.share)} each (house ${money(CONFIG.housePerPerson)} + van ${money(m.van)}${CONFIG.vanIsEstimate ? ", van is still an estimate" : ""}).`;
 
-  const ppl = st => rows.filter(r => st.includes(r.status)).reduce((s, r) => s + r.guests + r.kids, 0);
+  const ppl = st => rows.filter(r => st.includes(r.status)).reduce((s, r) => s + r.guests, 0);   // under 9 don't count toward spots
   const held = ppl(["in", "paid"]), coming = ppl(["pending"]), cap = CONFIG.spots;
-  $("#spotsLine").innerHTML = `Spots: <b>${held} of ${cap} held</b> (deposit in) · ${coming} coming without a deposit`
+  $("#spotsLine").innerHTML = `Spots: <b>${held} of ${cap} held</b> (9+, deposit in) · ${coming} coming without a deposit`
     + (held + coming > cap ? ` · <span class="over">${held + coming - cap} more people than spots. Deposits decide who's in.</span>` : ` · ${Math.max(0, cap - held - coming)} open`);
 
   const dues = $("#dues"); dues.innerHTML = "";
