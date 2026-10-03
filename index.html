@@ -211,6 +211,8 @@ h2.sec .neon{display:block}
 .how dl{margin:12px 0 0;display:grid;grid-template-columns:auto minmax(0,1fr);gap:10px 18px}
 .how dt{color:#6A5462}
 .how dd{margin:0;font-weight:700;word-break:break-word}
+.how dd a{color:#A0145C}
+.paybtn{display:flex;margin:16px 0 4px}
 .how p{font-size:14.5px;color:#4A3742;margin:16px 0 0}
 .how .memo{display:inline-block;background:#FFD3EA;color:#A0145C;padding:2px 8px;border-radius:6px;font-weight:700}
 
@@ -490,6 +492,7 @@ footer .logo{display:block;font-size:44px;margin-bottom:6px}
       <div class="how">
         <h3>How to pay</h3>
         <dl id="payList"></dl>
+        <a class="btn hot paybtn" data-paylink target="_blank" rel="noopener">Pay on Cash App</a>
         <p>Put <span class="memo" id="memo"></span> in the memo so we can match it to you. Your status on the list updates once we log it.</p>
         <p id="policy"></p>
         <p>Can't come but still want to chip in? Gifts go toward the trip, same Cash App. Put <span class="memo" id="giftMemo"></span> in the memo so we know it's a gift. Want to send Bri something personal? Hit her up directly.</p>
@@ -586,9 +589,13 @@ $("#datwBudget").textContent = CONFIG.datwBudget;
 $("#faqDue").textContent = CONFIG.schedule.map(s => `${s.what}: ${s.due}`).join(". ") + ".";
 CONFIG.pay.filter(p => p.value && !p.value.startsWith("[")).forEach(p => {
   const dt = document.createElement("dt"); dt.textContent = p.label;
-  const dd = document.createElement("dd"); dd.textContent = p.value;
+  const dd = document.createElement("dd");
+  if (p.url) { const a = document.createElement("a"); a.href = p.url; a.target = "_blank"; a.rel = "noopener"; a.textContent = p.value; dd.append(a); }
+  else dd.textContent = p.value;
   $("#payList").append(dt, dd);
 });
+const PAY_URL = (CONFIG.pay.find(p => p.url) || {}).url;
+document.querySelectorAll("[data-paylink]").forEach(a => { if (PAY_URL) a.href = PAY_URL; else a.remove(); });
 (function photos(){
   const [main, ...rest] = HOUSE_PHOTOS;
   const mi = new Image(); mi.alt = ""; mi.src = main.src; mi.onerror = () => mi.remove();
@@ -756,6 +763,11 @@ $("#rsvp").addEventListener("submit", async e => {
     msg.textContent = chosen === "pending" ? "You're on the list. Now go send that deposit."
       : chosen === "gift" ? `Thank you! Send your gift to ${(CONFIG.pay.find(p => p.value.startsWith("$")) || { value: "Cash App" }).value} with "${CONFIG.giftMemo}" in the memo.`
       : "You're on the list. We see you.";
+    if (PAY_URL && (chosen === "pending" || chosen === "gift")) {
+      const a = document.createElement("a"); a.href = PAY_URL; a.target = "_blank"; a.rel = "noopener";
+      a.textContent = chosen === "gift" ? "Open Cash App" : "Pay on Cash App";
+      msg.append(" ", a);
+    }
     f.reset();
   } catch (err) {
     msg.className = "msg err"; msg.textContent = "That didn't save. Check your connection and try again, or text Dani.";

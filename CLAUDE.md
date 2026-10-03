@@ -78,7 +78,7 @@ An invitation, itinerary, and RSVP site for a family road trip celebrating Bri's
 - **House photos:** Dani wants them hotlinked from the Vrbo listing (decided Oct 2026). Broken images already hide themselves.
 - **Admin:** `/admin.html`, magic link for danielle.washington21@gmail.com only. Policies are the ADMIN block in `schema.sql`.
 - **RSVP statuses:** `thinking` (Interested), `coins` (Checking coins), `pending` (Coming), and `gift` (Sending love: can't make it, sending a gift) can be set by the public. `in` (Locked in) and `paid` (Paid in full) are set by Dani only. `gift` rows are never riders and never count toward the van split.
-- **Cash App:** `$bri21celebration`. Trip memo `BRI21 + your name`; gift memo `BRI21 GIFT + your name`.
+- **Cash App:** `$bri21celebration`, pay link https://cash.app/$bri21celebration. Trip memo `BRI21 + your name`; gift memo `BRI21 GIFT + your name`.
 
 ## Definition of done
 - Live on Vercel, auto-deploying from `main`.

@@ -21,7 +21,7 @@ const CONFIG = {
     { what: "The rest of your van share", amount: "vanHalf", due: "Jan 10, 2027", note: "Paid in full. Then you just pack." }
   ],
   pay: [
-    { label: "Cash App", value: "$bri21celebration" }
+    { label: "Cash App", value: "$bri21celebration", url: "https://cash.app/$bri21celebration" }
   ],
   memo: "BRI21 + your name",
   giftMemo: "BRI21 GIFT + your name",       // "can't make it" gifts go toward the trip; memo keeps them separate from people's shares
