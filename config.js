@@ -23,7 +23,11 @@ const CONFIG = {
   ],
   memo: "BRI21 + your name",
   policy: "Deposits aren't refundable once the house is booked, because that money is already spent. If you can't make it, you can hand your spot to someone else and settle up with them.",
-  supabase: { url: "", anonKey: "", table: "bri21_rsvps" }
+  supabase: {
+    url: "https://kpgvrntpigvtgyrzmfba.supabase.co",
+    anonKey: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtwZ3ZybnRwaWd2dGd5cnptZmJhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYzNzQ1OTcsImV4cCI6MjA5MTk1MDU5N30.6g4rjiDbUmbM2A3I5fzQUzxHxF3PQ_QuRRMrT20RHzs", // public anon key, safe in client code
+    table: "bri21_rsvps"
+  }
 };
 
 const HOUSE_PHOTOS = [
