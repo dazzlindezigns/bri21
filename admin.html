@@ -90,6 +90,8 @@ h2{font-size:20px}
 .st.paid{background:#2B1A24;color:#FF8FCD}
 .st.gift{background:#fff;color:#A0145C;border:1.5px solid #FF8FCD}
 .flag{color:#C2003A;font-weight:700}
+#spotsLine b{color:var(--ink)}
+#spotsLine .over{color:var(--warn);font-weight:700}
 
 .body{padding:0 16px 16px;display:grid;gap:14px}
 .lbl{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#8A6F80;margin-bottom:6px}
@@ -158,6 +160,7 @@ h2{font-size:20px}
         <div>Still needed<b id="stillNeeded">$0</b></div>
       </div>
       <p class="sub" id="shareLine"></p>
+      <p class="sub" id="spotsLine"></p>
       <div class="dues" id="dues" role="group" aria-label="Due dates"></div>
     </section>
 
@@ -291,6 +294,11 @@ function render(){
   $("#fromGifts").textContent = money(fromGifts);
   $("#stillNeeded").textContent = money(Math.max(0, expected - total));
   $("#shareLine").textContent = `${heads} paying ${heads === 1 ? "head" : "heads"} × ${money(m.share)} each (house ${money(CONFIG.housePerPerson)} + van ${money(m.van)}${CONFIG.vanIsEstimate ? ", van is still an estimate" : ""}).`;
+
+  const ppl = st => rows.filter(r => st.includes(r.status)).reduce((s, r) => s + r.guests + r.kids, 0);
+  const held = ppl(["in", "paid"]), coming = ppl(["pending"]), cap = CONFIG.spots;
+  $("#spotsLine").innerHTML = `Spots: <b>${held} of ${cap} held</b> (deposit in) · ${coming} coming without a deposit`
+    + (held + coming > cap ? ` · <span class="over">${held + coming - cap} more people than spots. Deposits decide who's in.</span>` : ` · ${Math.max(0, cap - held - coming)} open`);
 
   const dues = $("#dues"); dues.innerHTML = "";
   m.dues.forEach((d, i) => {

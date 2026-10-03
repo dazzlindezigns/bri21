@@ -94,6 +94,17 @@ h2.sec .neon{display:block}
 .blurb{max-width:46ch;margin:0 auto 22px;color:var(--muted);font-size:16px}
 .blurb strong{color:var(--neon-soft)}
 .cta-row{display:flex;justify-content:center;flex-wrap:wrap;gap:12px}
+.spots-hero{display:inline-block;margin:0 auto 18px;padding:10px 16px;border:1.5px solid var(--neon);border-radius:16px;font-size:14.5px;font-weight:600;color:#FFD3EA;background:rgba(255,62,165,.12);box-shadow:0 0 18px rgba(255,62,165,.35)}
+.spots-hero b{color:#fff}
+.spots{margin:18px 0 0;background:#2B1A24;color:#F6EEF3;border-radius:16px;padding:16px 18px}
+.spots .top{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap}
+.spots .big{font-family:var(--display);text-transform:uppercase;font-size:24px;letter-spacing:.02em}
+.spots .big b{color:#FF8FCD}
+.spots .bar{height:10px;border-radius:999px;background:rgba(255,255,255,.12);overflow:hidden;margin:10px 0}
+.spots .bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,#FF2E96,#FF8FCD);transition:width .5s}
+.spots p{margin:0;font-size:14px;color:#C2B6BF}
+.spots p strong{color:#fff}
+.how .hold{background:#FFD3EA;border-radius:10px;padding:10px 12px;font-weight:600;color:#A0145C}
 .signs{list-style:none;margin:0;padding:0;display:grid;gap:10px;justify-items:end;position:relative}
 .signs::before{content:"";position:absolute;right:46%;top:-20px;bottom:-30px;width:6px;background:linear-gradient(#3a2431,#1b0f17);border-radius:3px;z-index:0}
 .signs li{position:relative;z-index:1;font-family:var(--display);text-transform:uppercase;font-size:20px;letter-spacing:.04em;padding:6px 26px 6px 14px;background:#1A0D16;border:2px solid var(--neon);color:#FFE3F1;text-shadow:0 0 8px rgba(255,62,165,.9);box-shadow:0 0 14px rgba(255,62,165,.45),inset 0 0 10px rgba(255,62,165,.25);clip-path:polygon(0 0,calc(100% - 16px) 0,100% 50%,calc(100% - 16px) 100%,0 100%)}
@@ -374,6 +385,7 @@ footer .logo{display:block;font-size:44px;margin-bottom:6px}
         <span><svg><use href="#i-pin"/></svg>Austin to Kissimmee, FL</span>
       </div>
       <p class="blurb">A big family road trip. A bigger celebration. We're taking over a house near Disney for Bri's 21st, and on <strong>Tuesday, February 9th, we drink around the world.</strong></p>
+      <p class="spots-hero" id="spotsHero">Only <b>20 spots</b> on the van and in the house. RSVP and send your deposit ASAP to hold yours.</p>
       <div class="cta-row">
         <a class="btn soft" href="#trip">Trip details</a>
         <a class="btn out" href="#who">Who all over there?</a>
@@ -501,6 +513,7 @@ footer .logo{display:block;font-size:44px;margin-bottom:6px}
       </div>
       <div class="how">
         <h3>How to pay</h3>
+        <p class="hold" id="payHold"></p>
         <dl id="payList"></dl>
         <a class="btn hot paybtn" data-paylink target="_blank" rel="noopener">Pay on Cash App</a>
         <p>Put <span class="memo" id="memo"></span> in the memo so we can match it to you. Your status on the list updates once we log it.</p>
@@ -523,6 +536,11 @@ footer .logo{display:block;font-size:44px;margin-bottom:6px}
           <span class="faces" id="faces"></span>
           <span class="faces-cap">the crew so far</span>
         </div>
+      </div>
+      <div class="spots" id="spots" aria-live="polite">
+        <div class="top"><span class="big" id="spotsBig"></span><span id="spotsLeft"></span></div>
+        <div class="bar"><i id="spotsFill"></i></div>
+        <p id="spotsSub"></p>
       </div>
       <div class="choices" role="group" aria-label="Where's your head at?">
         <button class="choice c1" type="button" data-status="pending" aria-pressed="false">I'm coming</button>
@@ -734,6 +752,7 @@ function render(){
       ro.append(li);
     });
 
+  renderSpots(items);
   const notice = $("#modeNotice");
   notice.hidden = Store.ready;
   if (!Store.ready) notice.textContent = "The list isn't connected yet. Text Dani to get added.";
@@ -741,9 +760,29 @@ function render(){
 }
 Store.onChange = render;
 
+/* spots: everyone counts (kids too). Held = deposit logged (Locked in / Paid in full). */
+function renderSpots(items){
+  const cap = CONFIG.spots;
+  const held = items.filter(i => i.status === "in" || i.status === "paid").reduce((s, i) => s + heads(i), 0);
+  const waiting = items.filter(i => i.status === "pending").reduce((s, i) => s + heads(i), 0);
+  const left = Math.max(0, cap - held);
+  $("#spotsBig").innerHTML = `<b>${Math.min(held, cap)}</b> of ${cap} spots held`;
+  $("#spotsLeft").textContent = left ? `${left} left` : "Full";
+  $("#spotsFill").style.width = Math.min(100, held / cap * 100) + "%";
+  $("#spotsSub").innerHTML = left
+    ? `First come, first served. Your spot is held once your ${money(CONFIG.housePerPerson)} deposit is in.` + (waiting ? ` <strong>${waiting} ${waiting === 1 ? "person said they're" : "people said they're"} coming but ${waiting === 1 ? "hasn't" : "haven't"} sent a deposit yet.</strong> Don't let somebody take your seat.` : "")
+    : "All spots are held. Put your name down anyway. If somebody drops, the next person on the list gets the call.";
+  $("#spotsHero").innerHTML = left
+    ? `Only <b>${cap} spots</b> on the van and in the house${held ? `, and <b>${left} left</b>` : ""}. RSVP and send your deposit ASAP to hold yours.`
+    : `All <b>${cap} spots</b> are held. Get on the list in case one opens up.`;
+  $("#payHold").textContent = left
+    ? `Only ${cap} spots, ${left} left. Your ${money(CONFIG.housePerPerson)} deposit is what holds yours. RSVP, then pay. Don't sleep on it.`
+    : `All ${cap} spots are held. Hold off on paying until Dani tells you a spot opened up.`;
+}
+
 /* choice buttons -> form */
 const COPY = {
-  pending:  ["Say less. You're coming.", "Add everybody in your crew, then send your deposit by the due date."],
+  pending:  ["Say less. You're coming.", "Add everybody in your crew, then send your deposit ASAP. Only 20 spots, and deposits are what hold them."],
   thinking: ["Interested? We see you.", "Put your name down. You can lock in later."],
   coins:    ["Check them coins.", "No pressure. Get on the list so we can count you."],
   gift:     ["We'll miss you. Send the love anyway.", `Your gift goes toward the trip. Put your name and a note for Bri on the list, then send it to ${(CONFIG.pay.find(p => p.value.startsWith("$")) || { value: "Cash App" }).value} with "${CONFIG.giftMemo}" in the memo.`]
@@ -813,7 +852,7 @@ $("#rsvp").addEventListener("submit", async e => {
     await Store.add(rows);
     msg.className = "msg ok";
     const payers = rows.filter(r => r.guests).length;
-    msg.textContent = chosen === "pending" ? (rows.length > 1 ? `You're on the list, all ${rows.length} of you.` : "You're on the list.") + (payers ? ` Now go send that deposit: ${money(CONFIG.housePerPerson * payers)}${payers > 1 ? ` for ${payers} people` : ""}.` : "")
+    msg.textContent = chosen === "pending" ? (rows.length > 1 ? `You're on the list, all ${rows.length} of you.` : "You're on the list.") + (payers ? ` Now go send that deposit: ${money(CONFIG.housePerPerson * payers)}${payers > 1 ? ` for ${payers} people` : ""}. Only ${CONFIG.spots} spots, and the deposit is what holds yours.` : ` Your spot isn't held until Dani confirms it. Only ${CONFIG.spots} spots.`)
       : chosen === "gift" ? `Thank you! Send your gift to ${(CONFIG.pay.find(p => p.value.startsWith("$")) || { value: "Cash App" }).value} with "${CONFIG.giftMemo}" in the memo.`
       : rows.length > 1 ? `You're on the list, all ${rows.length} of you. We see you.` : "You're on the list. We see you.";
     if (PAY_URL && (chosen === "pending" || chosen === "gift")) {
