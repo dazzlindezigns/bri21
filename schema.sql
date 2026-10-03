@@ -62,3 +62,25 @@ create policy "bri21 admin update" on public.bri21_rsvps for update to authentic
   with check (lower(auth.jwt()->>'email') = 'danielle.washington21@gmail.com' and amount_paid >= 0);
 create policy "bri21 admin delete" on public.bri21_rsvps for delete to authenticated
   using (lower(auth.jwt()->>'email') = 'danielle.washington21@gmail.com');
+
+-- ============================================================
+-- ONE ROW PER PERSON (Oct 2026). Every person in a party gets their own row
+-- with a name and age. party_id groups a family. guests/kids stay as 1/0 per
+-- row (9+ pays = guests 1; under 9 = kids 1) so the money math is unchanged.
+-- Ages are private: the public can submit an age but can't read it back.
+-- Safe to re-run.
+-- ============================================================
+alter table public.bri21_rsvps add column if not exists age int;
+alter table public.bri21_rsvps add column if not exists party_id uuid;
+alter table public.bri21_rsvps drop constraint if exists bri21_rsvps_age_check;
+alter table public.bri21_rsvps add constraint bri21_rsvps_age_check check (age is null or age between 0 and 120);
+alter table public.bri21_rsvps drop constraint if exists bri21_rsvps_guests_check;
+alter table public.bri21_rsvps add constraint bri21_rsvps_guests_check check (guests between 0 and 12);
+alter table public.bri21_rsvps drop constraint if exists bri21_rsvps_heads_check;
+alter table public.bri21_rsvps add constraint bri21_rsvps_heads_check check (
+  guests + kids >= 1
+  and (age is null or (age >= 9 and guests = 1 and kids = 0) or (age < 9 and guests = 0 and kids = 1))
+);
+create index if not exists bri21_rsvps_party_idx on public.bri21_rsvps (party_id);
+grant insert (age, party_id) on public.bri21_rsvps to anon;
+grant select (party_id) on public.bri21_rsvps to anon;

@@ -77,6 +77,7 @@ An invitation, itinerary, and RSVP site for a family road trip celebrating Bri's
 - **Gifts:** "can't make it" gifts go toward the trip, not to Bri. People who want to gift Bri personally contact her directly.
 - **House photos:** Dani wants them hotlinked from the Vrbo listing (decided Oct 2026). Broken images already hide themselves.
 - **Admin:** `/admin.html`, magic link or password for danielle.washington21@gmail.com only. Magic links need `https://bri21.com/**` in Supabase Redirect URLs, or they fall back to the shared Site URL (Snaplist). Policies are the ADMIN block in `schema.sql`.
+- **One row per person:** each RSVP saves every person in the party as their own row (name, age, shared `party_id`). Age 9+ → guests=1/kids=0, under 9 → guests=0/kids=1. Ages are admin-only (anon can insert `age` but not select it). Money is tracked per person; admin can apply a payment or status to a whole party.
 - **RSVP statuses:** `thinking` (Interested), `coins` (Checking coins), `pending` (Coming), and `gift` (Sending love: can't make it, sending a gift) can be set by the public. `in` (Locked in) and `paid` (Paid in full) are set by Dani only. `gift` rows are never riders and never count toward the van split.
 - **Cash App:** `$bri21celebration`, pay link https://cash.app/$bri21celebration. Trip memo `BRI21 + your name`; gift memo `BRI21 GIFT + your name`.
 

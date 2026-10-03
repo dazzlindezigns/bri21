@@ -245,7 +245,17 @@ h2.sec .neon{display:block}
 .f input,.f textarea{font:inherit;font-size:16px;color:var(--dark-ink);background:#FDF2F7;border:1.5px solid #F0C6D8;border-radius:10px;padding:11px 12px;width:100%}
 .f input:focus,.f textarea:focus{outline:none;border-color:#E0156F}
 .row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.row2[hidden]{display:none}
+.row2[hidden],.f[hidden],.people[hidden]{display:none}
+.people{border:0;padding:0;margin:0 0 12px;min-width:0}
+.people legend{font-size:14px;font-weight:600;padding:0;margin-bottom:4px}
+.people .hint{margin:0 0 10px;font-size:13px;color:#6A5462}
+.prow{display:grid;grid-template-columns:minmax(0,1fr) 76px 40px;gap:8px;margin-bottom:8px;align-items:center}
+.prow input{font:inherit;font-size:16px;color:var(--dark-ink);background:#FDF2F7;border:1.5px solid #F0C6D8;border-radius:10px;padding:11px 12px;width:100%;min-width:0}
+.prow input:focus{outline:none;border-color:#E0156F}
+.prow input[aria-invalid="true"]{border-color:#B3261E;background:#FFF0F0}
+.prow .rm{width:40px;height:44px;border:0;border-radius:10px;background:#FFE0EE;color:#A0145C;font-size:22px;line-height:1;cursor:pointer}
+.prow .you{font-size:12px;font-weight:700;color:#A0145C;text-align:center;text-transform:uppercase;letter-spacing:.06em}
+.addp{font:inherit;font-weight:700;font-size:15px;color:#A0145C;background:none;border:1.5px dashed #E0156F;border-radius:10px;padding:10px 14px;width:100%;cursor:pointer}
 .msg{font-size:14px;margin-top:10px;min-height:1.2em}
 .msg.err{color:#B3261E}.msg.ok{color:#A0145C;font-weight:700}
 .notice{font-size:14px;padding:10px 12px;border-radius:10px;background:#FFE0EE;margin-bottom:14px}
@@ -525,11 +535,13 @@ footer .logo{display:block;font-size:44px;margin-bottom:6px}
           <h3 id="formH">Put your name on it</h3>
           <p id="formSub">No payment here. This just puts you on the list.</p>
           <div class="notice" id="modeNotice" hidden></div>
-          <div class="f"><label for="nm">Your name (how the family knows you)</label><input id="nm" name="name" maxlength="60" autocomplete="name" required></div>
-          <div class="row2" id="headsRow">
-            <div class="f"><label for="gu">People 9 and up</label><input id="gu" name="guests" type="number" min="1" max="12" value="1" inputmode="numeric"></div>
-            <div class="f"><label for="kd">Kids under 9 (free)</label><input id="kd" name="kids" type="number" min="0" max="12" value="0" inputmode="numeric"></div>
-          </div>
+          <div class="f" id="nameRow" hidden><label for="nm">Your name (how the family knows you)</label><input id="nm" name="name" maxlength="60" autocomplete="name"></div>
+          <fieldset class="people" id="people">
+            <legend>Who's coming? Everybody's name and age</legend>
+            <p class="hint">Put yourself first, then everybody you're bringing. Age on the trip: 9 and up pay a share, under 9 is free. Only Dani sees ages.</p>
+            <div id="peopleRows"></div>
+            <button type="button" class="addp" id="addPerson">+ Add someone</button>
+          </fieldset>
           <div class="f"><label for="nt">A note for Bri (optional)</label><textarea id="nt" name="note" rows="2" maxlength="140"></textarea></div>
           <button class="btn hot" type="submit" id="sendBtn" style="width:100%">Add me to the list</button>
           <div class="msg" id="formMsg" role="status" aria-live="polite"></div>
@@ -664,7 +676,7 @@ const Store = {
   },
   async load(){
     try {
-      const res = await fetch(this.base() + "?select=id,name,guests,kids,status,note,created_at&order=created_at.asc", { headers: this.headers() });
+      const res = await fetch(this.base() + "?select=id,name,guests,kids,status,note,created_at,party_id&order=created_at.asc", { headers: this.headers() });
       if (res.ok) { this.items = await res.json(); this.onChange(); }
     } catch (e) {}
   },
@@ -702,7 +714,9 @@ function render(){
 
   const ro = $("#roster"); ro.innerHTML = "";
   if (!items.length) ro.innerHTML = '<li class="empty" style="display:block"><strong>Nobody yet. Somebody has to go first.</strong>Put your name down and watch everybody else follow.</li>';
-  items.slice().sort((a, b) => (STATUS[a.status]?.order ?? 9) - (STATUS[b.status]?.order ?? 9) || String(a.created_at).localeCompare(String(b.created_at)))
+  const parties = {};
+  items.forEach(i => { if (i.party_id) (parties[i.party_id] ||= []).push(i); });
+  items.slice().sort((a, b) => (STATUS[a.status]?.order ?? 9) - (STATUS[b.status]?.order ?? 9) || String(a.created_at).localeCompare(String(b.created_at)) || String(a.party_id).localeCompare(String(b.party_id)))
     .forEach(i => {
       const li = document.createElement("li");
       const nm = document.createElement("div"); nm.className = "nm"; nm.textContent = i.name;
@@ -710,7 +724,11 @@ function render(){
       st.className = "st " + key; st.textContent = STATUS[key].label;
       const meta = document.createElement("div"); meta.className = "meta";
       const g = +i.guests || 0, k = +i.kids || 0;
-      meta.textContent = key === "gift" ? "Can't make it, but showing love" : `${g} ${g === 1 ? "person" : "people"}${k ? `, plus ${k} little${k === 1 ? "" : "s"}` : ""}`;
+      const others = (parties[i.party_id] || []).filter(o => o !== i).map(o => String(o.name).trim().split(/\s+/)[0]);
+      const withTxt = others.length ? ` · with ${others[0]}${others.length > 1 ? ` + ${others.length - 1} more` : ""}` : "";
+      meta.textContent = key === "gift" ? "Can't make it, but showing love"
+        : g + k === 1 ? (g ? "9 and up" : "Under 9, free") + withTxt
+        : `${g} ${g === 1 ? "person" : "people"}${k ? `, plus ${k} little${k === 1 ? "" : "s"}` : ""}`;
       li.append(nm, st, meta);
       if (i.note) { const n = document.createElement("div"); n.className = "note"; n.textContent = i.note; li.append(n); }
       ro.append(li);
@@ -725,7 +743,7 @@ Store.onChange = render;
 
 /* choice buttons -> form */
 const COPY = {
-  pending:  ["Say less. You're coming.", "Add your name, then send your deposit by the due date."],
+  pending:  ["Say less. You're coming.", "Add everybody in your crew, then send your deposit by the due date."],
   thinking: ["Interested? We see you.", "Put your name down. You can lock in later."],
   coins:    ["Check them coins.", "No pressure. Get on the list so we can count you."],
   gift:     ["We'll miss you. Send the love anyway.", `Your gift goes toward the trip. Put your name and a note for Bri on the list, then send it to ${(CONFIG.pay.find(p => p.value.startsWith("$")) || { value: "Cash App" }).value} with "${CONFIG.giftMemo}" in the memo.`]
@@ -736,39 +754,74 @@ function pick(status, focus){
   document.querySelectorAll(".choice").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.status === chosen)));
   $("#formH").textContent = COPY[chosen][0];
   $("#formSub").textContent = COPY[chosen][1];
-  $("#headsRow").hidden = chosen === "gift";
+  $("#formMsg").textContent = ""; $("#formMsg").className = "msg";
+  $("#people").hidden = chosen === "gift";
+  $("#nameRow").hidden = chosen !== "gift";
   $("#sendBtn").textContent = chosen === "gift" ? "Add my love to the list" : "Add me to the list";
   $("#rsvp").hidden = false;
-  if (focus) setTimeout(() => $("#nm").focus({ preventScroll: true }), 350);
+  if (focus) setTimeout(() => (chosen === "gift" ? $("#nm") : $("#peopleRows input")).focus({ preventScroll: true }), 350);
 }
+/* people rows */
+const MAX_PEOPLE = 12;
+function personRow(first){
+  const d = document.createElement("div"); d.className = "prow";
+  const n = document.createElement("input"); n.maxLength = 60; n.autocomplete = first ? "name" : "off";
+  n.placeholder = first ? "Your name" : "Their name"; n.setAttribute("aria-label", first ? "Your name" : "Name");
+  const a = document.createElement("input"); a.type = "number"; a.inputMode = "numeric"; a.min = 0; a.max = 120;
+  a.placeholder = "Age"; a.setAttribute("aria-label", first ? "Your age" : "Their age");
+  d.append(n, a);
+  if (first) { const y = document.createElement("span"); y.className = "you"; y.textContent = "You"; d.append(y); }
+  else {
+    const x = document.createElement("button"); x.type = "button"; x.className = "rm"; x.textContent = "×"; x.setAttribute("aria-label", "Remove this person");
+    x.addEventListener("click", () => { d.remove(); syncAdd(); $("#peopleRows .prow:last-child input").focus(); });
+    d.append(x);
+  }
+  return d;
+}
+function syncAdd(){ $("#addPerson").hidden = $("#peopleRows").children.length >= MAX_PEOPLE; }
+function resetPeople(){ $("#peopleRows").innerHTML = ""; $("#peopleRows").append(personRow(true)); syncAdd(); }
+$("#addPerson").addEventListener("click", () => { const r = personRow(false); $("#peopleRows").append(r); syncAdd(); r.querySelector("input").focus(); });
+resetPeople();
+const newId = () => (crypto.randomUUID ? crypto.randomUUID() : "10000000-1000-4000-8000-100000000000".replace(/[018]/g, c => (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)));
+
 document.querySelectorAll(".choice").forEach(b => b.addEventListener("click", () => pick(b.dataset.status, true)));
 document.querySelectorAll("[data-pick]").forEach(a => a.addEventListener("click", () => pick(a.dataset.pick, true)));
 
 $("#rsvp").addEventListener("submit", async e => {
   e.preventDefault();
   const f = e.target, msg = $("#formMsg"), btn = $("#sendBtn");
-  const name = f.name.value.trim();
-  if (!name) { msg.className = "msg err"; msg.textContent = "Add your name so the family knows who you are."; f.name.focus(); return; }
-  const r = {
-    name: name.slice(0, 60),
-    guests: chosen === "gift" ? 1 : Math.min(12, Math.max(1, parseInt(f.guests.value, 10) || 1)),
-    kids: chosen === "gift" ? 0 : Math.min(12, Math.max(0, parseInt(f.kids.value, 10) || 0)),
-    status: chosen,
-    note: f.note.value.trim().slice(0, 140)
-  };
+  const note = f.note.value.trim().slice(0, 140), party = newId();
+  let rows;
+  if (chosen === "gift") {
+    const name = f.name.value.trim();
+    if (!name) { msg.className = "msg err"; msg.textContent = "Add your name so the family knows who you are."; f.name.focus(); return; }
+    rows = [{ name: name.slice(0, 60), guests: 1, kids: 0, status: "gift", note, party_id: party }];
+  } else {
+    rows = []; let bad = null;
+    [...$("#peopleRows").children].forEach((d, idx) => {
+      const [n, a] = d.querySelectorAll("input");
+      const name = n.value.trim(), age = a.value.trim() === "" ? NaN : Number(a.value);
+      const okN = !!name, okA = Number.isInteger(age) && age >= 0 && age <= 120;
+      n.setAttribute("aria-invalid", String(!okN)); a.setAttribute("aria-invalid", String(!okA));
+      if ((!okN || !okA) && !bad) bad = !okN ? n : a;
+      rows.push({ name: name.slice(0, 60), age, guests: age >= 9 ? 1 : 0, kids: age >= 9 ? 0 : 1, status: chosen, note: idx === 0 ? note : "", party_id: party });
+    });
+    if (bad) { msg.className = "msg err"; msg.textContent = "Every person needs a name and an age."; bad.focus(); return; }
+  }
   btn.disabled = true; msg.className = "msg"; msg.textContent = "Adding you…";
   try {
-    await Store.add(r);
+    await Store.add(rows);
     msg.className = "msg ok";
-    msg.textContent = chosen === "pending" ? "You're on the list. Now go send that deposit."
+    const payers = rows.filter(r => r.guests).length;
+    msg.textContent = chosen === "pending" ? (rows.length > 1 ? `You're on the list, all ${rows.length} of you.` : "You're on the list.") + (payers ? ` Now go send that deposit: ${money(CONFIG.housePerPerson * payers)}${payers > 1 ? ` for ${payers} people` : ""}.` : "")
       : chosen === "gift" ? `Thank you! Send your gift to ${(CONFIG.pay.find(p => p.value.startsWith("$")) || { value: "Cash App" }).value} with "${CONFIG.giftMemo}" in the memo.`
-      : "You're on the list. We see you.";
+      : rows.length > 1 ? `You're on the list, all ${rows.length} of you. We see you.` : "You're on the list. We see you.";
     if (PAY_URL && (chosen === "pending" || chosen === "gift")) {
       const a = document.createElement("a"); a.href = PAY_URL; a.target = "_blank"; a.rel = "noopener";
       a.textContent = chosen === "gift" ? "Open Cash App" : "Pay on Cash App";
       msg.append(" ", a);
     }
-    f.reset();
+    f.reset(); resetPeople();
   } catch (err) {
     msg.className = "msg err"; msg.textContent = "That didn't save. Check your connection and try again, or text Dani.";
   } finally { btn.disabled = false; }

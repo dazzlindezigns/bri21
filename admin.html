@@ -103,6 +103,10 @@ h2{font-size:20px}
 .payrow button{background:var(--dark-ink);color:#fff;border:0;border-radius:10px;padding:0 18px;font-weight:700}
 .owed{font-size:13.5px;color:#6A5462;display:grid;gap:2px}
 .note{font-style:italic;font-size:14px;color:#A0145C}
+.party ul{list-style:none;margin:0;padding:0;display:grid;gap:3px;font-size:14px}
+.party li.me{font-weight:700}
+.whole{display:flex;gap:8px;align-items:flex-start;margin-top:10px;font-size:14px;font-weight:600;cursor:pointer}
+.whole input{width:20px;height:20px;margin:0;accent-color:#E0156F;flex:none}
 .del{justify-self:start;background:none;border:0;padding:0;color:#8A6F80;font-size:13px;text-decoration:underline}
 
 .empty{color:var(--muted);text-align:center;padding:30px 10px}
@@ -248,20 +252,27 @@ $("#outBtn").addEventListener("click", async () => { await sb.auth.signOut(); ro
 
 /* ---------- data ---------- */
 async function load(){
-  const { data, error } = await sb.from(TABLE).select("id,name,guests,kids,status,note,amount_paid,created_at").order("created_at", { ascending: true });
+  const { data, error } = await sb.from(TABLE).select("id,name,guests,kids,status,note,amount_paid,created_at,age,party_id").order("created_at", { ascending: true });
   if (error) { toast("Couldn't load the list. Has the admin SQL in schema.sql been run? (" + error.message + ")", true); return; }
   rows = data.map(r => ({ ...r, guests: +r.guests || 0, kids: +r.kids || 0, amount_paid: +r.amount_paid || 0 }));
   render();
 }
-async function save(id, patch, label, before){
-  const { data, error } = await sb.from(TABLE).update(patch).eq("id", id).select("id,status,amount_paid");
-  if (error || !data?.length) { toast("Didn't save. " + (error?.message || "No permission. Check the admin policies."), true); await load(); return false; }
-  const r = rows.find(x => x.id === id); Object.assign(r, { status: data[0].status, amount_paid: +data[0].amount_paid || 0 });
+// changes: [{ id, patch, before? }]. Saves each row, then offers one Undo for the whole batch.
+async function saveMany(changes, label){
+  for (const c of changes) {
+    const { data, error } = await sb.from(TABLE).update(c.patch).eq("id", c.id).select("id,status,amount_paid");
+    if (error || !data?.length) { toast("Didn't save. " + (error?.message || "No permission. Check the admin policies."), true); await load(); return false; }
+    const r = rows.find(x => x.id === c.id); Object.assign(r, { status: data[0].status, amount_paid: +data[0].amount_paid || 0 });
+  }
   render();
-  undo = before ? { id, patch: before } : null;
-  toast(label, false, !!before);
+  const back = changes.filter(c => c.before).map(c => ({ id: c.id, patch: c.before }));
+  undo = back.length ? back : null;
+  toast(label, false, !!undo);
   return true;
 }
+const partyOf = r => r.party_id ? rows.filter(x => x.party_id === r.party_id) : [r];
+const first = n => String(n).trim().split(/\s+/)[0];
+let wholeParty = false;
 document.addEventListener("visibilitychange", () => { if (!document.hidden && !$("#app").hidden) load(); });
 
 /* ---------- render ---------- */
@@ -313,7 +324,9 @@ function render(){
   else if (filter === "behind") list = list.filter(behindAny);
   else if (filter === "maybe") list = list.filter(r => r.status === "thinking" || r.status === "coins");
   else if (filter === "gift") list = list.filter(r => r.status === "gift");
-  list.sort((a, b) => a.name.localeCompare(b.name));
+  // keep families together: sort by the party's first name alphabetically, then oldest first
+  const pkey = r => partyOf(r).map(x => x.name.toLowerCase()).sort()[0] + "|" + (r.party_id || r.id);
+  list.sort((a, b) => pkey(a).localeCompare(pkey(b)) || (b.age ?? 99) - (a.age ?? 99) || a.name.localeCompare(b.name));
 
   const ul = $("#list"); ul.innerHTML = "";
   $("#empty").hidden = !!list.length;
@@ -329,11 +342,14 @@ function rowEl(r, m, behind){
   head.innerHTML = `<div class="nm"></div><div class="meta"><span class="st ${r.status}"></span><span class="hc"></span></div><div class="amt"><b></b><small></small></div>`;
   head.querySelector(".nm").textContent = r.name;
   head.querySelector(".st").textContent = STATUS[r.status] || r.status;
-  head.querySelector(".hc").textContent = r.status === "gift" ? "" : `${r.guests}${r.kids ? ` + ${r.kids} kid${r.kids === 1 ? "" : "s"}` : ""}`;
+  const mates = partyOf(r).filter(x => x !== r);
+  head.querySelector(".hc").textContent = r.status === "gift" ? ""
+    : (r.age != null ? `age ${r.age}${r.kids ? " · free" : ""}` : `${r.guests}${r.kids ? ` + ${r.kids} kid${r.kids === 1 ? "" : "s"}` : ""}`)
+      + (mates.length ? ` · with ${first(mates[0].name)}${mates.length > 1 ? ` + ${mates.length - 1}` : ""}` : "");
   head.querySelector(".amt b").textContent = money(r.amount_paid);
   head.querySelector(".amt small").textContent = owe ? `of ${money(owe)}` : r.status === "gift" ? "gift" : "";
   if (behind) head.querySelector(".amt").classList.add("behind");
-  head.addEventListener("click", () => { openId = openId === r.id ? null : r.id; render(); if (openId) setTimeout(() => li.querySelector("input")?.focus({ preventScroll: true }), 0); });
+  head.addEventListener("click", () => { openId = openId === r.id ? null : r.id; wholeParty = false; render(); if (openId) setTimeout(() => li.querySelector("input")?.focus({ preventScroll: true }), 0); });
   li.append(head);
   if (openId !== r.id) return li;
 
@@ -354,14 +370,33 @@ function rowEl(r, m, behind){
   }
   if (r.note) { const n = document.createElement("div"); n.className = "note"; n.textContent = `“${r.note}”`; body.append(n); }
 
+  // party: list everyone and offer to apply actions to all of them
+  const party = partyOf(r);
+  if (party.length > 1) {
+    const pw = document.createElement("div"); pw.className = "party";
+    pw.innerHTML = `<div class="lbl">Their party</div><ul></ul><label class="whole"><input type="checkbox"> <span></span></label>`;
+    party.slice().sort((a, b) => (b.age ?? 99) - (a.age ?? 99)).forEach(x => {
+      const li2 = document.createElement("li");
+      li2.textContent = `${x.name}${x.age != null ? `, ${x.age}` : ""} · ${STATUS[x.status] || x.status} · ${money(x.amount_paid)}${x.kids && !x.guests ? " (free)" : ""}`;
+      if (x === r) li2.className = "me";
+      pw.querySelector("ul").append(li2);
+    });
+    const payers = party.filter(x => x.guests > 0).length;
+    pw.querySelector("span").textContent = `Apply to the whole party (payments go to the ${payers} ${payers === 1 ? "person" : "people"} 9 and up)`;
+    const cb = pw.querySelector("input"); cb.checked = wholeParty;
+    cb.addEventListener("change", () => { wholeParty = cb.checked; render(); });
+    body.append(pw);
+  }
+
   // payment
   const pay = document.createElement("div");
-  pay.innerHTML = `<div class="lbl">Add a payment</div><div class="quick"></div><form class="payrow"><input type="number" inputmode="decimal" step="0.01" placeholder="Amount" aria-label="Payment amount"><button type="submit">+ Add</button></form>`;
+  pay.innerHTML = `<div class="lbl">${wholeParty && party.length > 1 ? "Add a payment, each person 9+" : "Add a payment"}</div><div class="quick"></div><form class="payrow"><input type="number" inputmode="decimal" step="0.01" placeholder="Amount" aria-label="Payment amount"><button type="submit">+ Add</button></form>`;
   const quick = pay.querySelector(".quick");
+  const each = wholeParty && party.length > 1;
   const presets = r.status === "gift" ? [20, 50, 100] : [...new Set([
-    CONFIG.housePerPerson * r.guests,
-    Math.round(m.van / 2 * r.guests),
-    Math.max(0, Math.round(owe - r.amount_paid))
+    CONFIG.housePerPerson * (each ? 1 : r.guests),
+    Math.round(m.van / 2 * (each ? 1 : r.guests)),
+    each ? 0 : Math.max(0, Math.round(owe - r.amount_paid))
   ])].filter(v => v > 0);
   presets.forEach((v, i) => {
     const b = document.createElement("button"); b.type = "button";
@@ -383,7 +418,12 @@ function rowEl(r, m, behind){
   Object.entries(STATUS).forEach(([k, l]) => {
     const b = document.createElement("button"); b.type = "button"; b.textContent = l;
     b.setAttribute("aria-pressed", String(r.status === k));
-    b.addEventListener("click", () => { if (r.status !== k) save(r.id, { status: k }, `${r.name}: ${l}`, { status: r.status }); });
+    b.addEventListener("click", () => {
+      const who = (wholeParty ? party : [r]).filter(x => x.status !== k);
+      if (!who.length) return;
+      saveMany(who.map(x => ({ id: x.id, patch: { status: k }, before: { status: x.status } })),
+        who.length > 1 ? `${who.length} people: ${l}` : `${who[0].name}: ${l}`);
+    });
     st.querySelector(".seg").append(b);
   });
   body.append(st);
@@ -402,9 +442,12 @@ function rowEl(r, m, behind){
 }
 
 async function addPay(r, v){
-  const next = Math.round((r.amount_paid + v) * 100) / 100;
-  if (next < 0) { toast("That would put them below $0.", true); return; }
-  await save(r.id, { amount_paid: next }, `${money(v)} logged for ${r.name} · ${money(next)} total`, { amount_paid: r.amount_paid });
+  const who = wholeParty ? partyOf(r).filter(x => x.guests > 0 && x.status !== "gift") : [r];
+  if (!who.length) { toast("Nobody 9 and up in this party to log a payment for.", true); return; }
+  const changes = who.map(x => ({ id: x.id, patch: { amount_paid: Math.round((x.amount_paid + v) * 100) / 100 }, before: { amount_paid: x.amount_paid } }));
+  if (changes.some(c => c.patch.amount_paid < 0)) { toast("That would put someone below $0.", true); return; }
+  await saveMany(changes, who.length > 1 ? `${money(v)} each logged for ${who.length} people · ${money(v * who.length)} total`
+    : `${money(v)} logged for ${r.name} · ${money(changes[0].patch.amount_paid)} total`);
 }
 
 /* ---------- toast + undo ---------- */
@@ -420,7 +463,7 @@ function toast(text, err = false, canUndo = false){
 $("#undoBtn").addEventListener("click", async () => {
   if (!undo) return;
   const u = undo; undo = null;
-  await save(u.id, u.patch, "Undone");
+  await saveMany(u, "Undone");
 });
 
 $("#q").addEventListener("input", render);
