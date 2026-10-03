@@ -19,9 +19,10 @@ const CONFIG = {
   ],
   pay: [
     { label: "Zelle (preferred)", value: "[add your Zelle phone or email]" },
-    { label: "Cash App", value: "[add your $cashtag]" }
+    { label: "Cash App", value: "$bri21celebration" }
   ],
   memo: "BRI21 + your name",
+  giftMemo: "BRI21 GIFT + your name",       // for "can't make it" gifts, so they don't get mixed up with trip shares
   policy: "Deposits aren't refundable once the house is booked, because that money is already spent. If you can't make it, you can hand your spot to someone else and settle up with them.",
   supabase: {
     url: "https://kpgvrntpigvtgyrzmfba.supabase.co",

@@ -73,7 +73,8 @@ An invitation, itinerary, and RSVP site for a family road trip celebrating Bri's
   - The rest of the van share, due Jan 10, 2027
   - Memo line: "BRI21 + your name"
   - Deposits are nonrefundable once the house is booked; people can transfer their spot.
-- **RSVP statuses:** `thinking` (Interested), `coins` (Checking coins), `pending` (Coming) can be set by the public. `in` (Locked in) and `paid` (Paid in full) are set by Dani only.
+- **RSVP statuses:** `thinking` (Interested), `coins` (Checking coins), `pending` (Coming), and `gift` (Sending love: can't make it, sending a gift) can be set by the public. `in` (Locked in) and `paid` (Paid in full) are set by Dani only. `gift` rows are never riders and never count toward the van split.
+- **Cash App:** `$bri21celebration`. Trip memo `BRI21 + your name`; gift memo `BRI21 GIFT + your name`.
 
 ## Definition of done
 - Live on Vercel, auto-deploying from `main`.
