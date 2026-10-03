@@ -193,6 +193,7 @@ const sb = supabase.createClient(CONFIG.supabase.url, CONFIG.supabase.anonKey, {
   auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true, flowType: "implicit" }
 });
 
+let notes = [];
 let rows = [], openId = null, filter = "all", dueFilter = null, undo = null;
 
 /* ---------- money math (matches the public page) ---------- */
@@ -258,6 +259,8 @@ async function load(){
   const { data, error } = await sb.from(TABLE).select("id,name,guests,kids,status,note,amount_paid,created_at,age,party_id").order("created_at", { ascending: true });
   if (error) { toast("Couldn't load the list. Has the admin SQL in schema.sql been run? (" + error.message + ")", true); return; }
   rows = data.map(r => ({ ...r, guests: +r.guests || 0, kids: +r.kids || 0, amount_paid: +r.amount_paid || 0 }));
+  const n = await sb.from("bri21_notes").select("id,rsvp_id,note,created_at").order("created_at", { ascending: true });
+  notes = n.error ? [] : n.data;
   render();
 }
 // changes: [{ id, patch, before? }]. Saves each row, then offers one Undo for the whole batch.
@@ -377,6 +380,18 @@ function rowEl(r, m, behind){
     body.append(ow);
   }
   if (r.note) { const n = document.createElement("div"); n.className = "note"; n.textContent = `“${r.note}”`; body.append(n); }
+  notes.filter(x => x.rsvp_id === r.id).forEach(x => {
+    const n = document.createElement("div"); n.className = "note";
+    n.textContent = `“${x.note}” `;
+    const rm = document.createElement("button"); rm.type = "button"; rm.className = "del"; rm.textContent = "remove";
+    rm.addEventListener("click", async () => {
+      if (!confirm("Remove this note from the public list?")) return;
+      const { error } = await sb.from("bri21_notes").delete().eq("id", x.id);
+      if (error) { toast("Couldn't remove: " + error.message, true); return; }
+      await load(); toast("Note removed");
+    });
+    n.append(rm); body.append(n);
+  });
 
   // party: list everyone and offer to apply actions to all of them
   const party = partyOf(r);

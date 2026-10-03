@@ -106,6 +106,13 @@ h2.sec .neon{display:block}
 .spots p strong{color:#fff}
 .crew{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;margin-top:14px;padding:12px 14px;background:#fff;border:1.5px dashed #E0156F;border-radius:14px;font-size:14.5px;color:var(--dark-ink)}
 .crew[hidden]{display:none}
+.crew-btns{display:flex;flex-wrap:wrap;gap:8px}
+.crew button.alt,.noteform button.alt{background:#FFD3EA;color:#A0145C}
+.noteform{flex-basis:100%;display:grid;gap:6px;margin-top:4px}
+.noteform[hidden]{display:none}
+.noteform label{font-size:13.5px;font-weight:600}
+.noteform select,.noteform textarea{font:inherit;font-size:16px;color:var(--dark-ink);background:#FDF2F7;border:1.5px solid #F0C6D8;border-radius:10px;padding:10px 12px;width:100%}
+.noteform-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:4px}
 .crew button,.msg .crewlink{font:700 14px/1.2 var(--body);background:#2B1A24;color:#fff;border:0;border-radius:10px;padding:10px 14px;cursor:pointer}
 .msg .crewlink{display:inline-block;margin-top:8px;background:none;color:#A0145C;padding:0;text-decoration:underline}
 .how .hold{background:#FFD3EA;border-radius:10px;padding:10px 12px;font-weight:600;color:#A0145C}
@@ -549,7 +556,18 @@ footer .logo{display:block;font-size:44px;margin-bottom:6px}
       </div>
       <div class="crew" id="crewBar" hidden>
         <span id="crewTxt"></span>
-        <button type="button" id="crewBtn">Forgot somebody? Add them to your crew</button>
+        <span class="crew-btns">
+          <button type="button" id="crewBtn">Forgot somebody? Add them to your crew</button>
+          <button type="button" id="noteBtn" class="alt" hidden>Leave Bri a note</button>
+        </span>
+        <form class="noteform" id="noteForm" hidden>
+          <label for="noteFrom">From</label>
+          <select id="noteFrom"></select>
+          <label for="noteText">Your note for Bri</label>
+          <textarea id="noteText" rows="2" maxlength="140" placeholder="Say something sweet (or sassy)"></textarea>
+          <div class="noteform-row"><button type="submit" id="noteSend">Post my note</button><button type="button" class="alt" id="noteCancel">Never mind</button></div>
+          <div class="msg" id="noteMsg" role="status" aria-live="polite"></div>
+        </form>
       </div>
       <div class="choices" role="group" aria-label="Where's your head at?">
         <button class="choice c1" type="button" data-status="pending" aria-pressed="false">I'm coming</button>
@@ -693,7 +711,7 @@ document.querySelectorAll("[data-est]").forEach(el => { el.hidden = !CONFIG.vanI
 
 /* data: Supabase */
 const Store = {
-  ready: false, items: [], onChange: () => {},
+  ready: false, items: [], notes: [], notesReady: false, onChange: () => {},
   base(){ return CONFIG.supabase.url.replace(/\/$/, "") + "/rest/v1/" + CONFIG.supabase.table; },
   headers(){ const k = CONFIG.supabase.anonKey; return { apikey: k, Authorization: "Bearer " + k, "Content-Type": "application/json" }; },
   async init(){
@@ -705,8 +723,18 @@ const Store = {
   async load(){
     try {
       const res = await fetch(this.base() + "?select=id,name,guests,kids,status,note,created_at,party_id&order=created_at.asc", { headers: this.headers() });
-      if (res.ok) { this.items = await res.json(); this.onChange(); }
+      if (res.ok) this.items = await res.json();
     } catch (e) {}
+    try {   // extra notes people add later (bri21_notes). If the table isn't there yet, the page just skips them.
+      const res = await fetch(this.base().replace(/[^/]+$/, "bri21_notes") + "?select=rsvp_id,note,created_at&order=created_at.asc", { headers: this.headers() });
+      this.notesReady = res.ok; if (res.ok) this.notes = await res.json();
+    } catch (e) { this.notesReady = false; }
+    this.onChange();
+  },
+  async addNote(n){
+    const res = await fetch(this.base().replace(/[^/]+$/, "bri21_notes"), { method: "POST", headers: { ...this.headers(), Prefer: "return=minimal" }, body: JSON.stringify(n) });
+    if (!res.ok) throw new Error("save");
+    await this.load();
   },
   async add(r){
     if (!this.ready) throw new Error("offline");
@@ -759,6 +787,7 @@ function render(){
         : `${g} ${g === 1 ? "person" : "people"}${k ? `, plus ${k} little${k === 1 ? "" : "s"}` : ""}`;
       li.append(nm, st, meta);
       if (i.note) { const n = document.createElement("div"); n.className = "note"; n.textContent = i.note; li.append(n); }
+      Store.notes.filter(x => x.rsvp_id === i.id).forEach(x => { const n = document.createElement("div"); n.className = "note"; n.textContent = x.note; li.append(n); });
       ro.append(li);
     });
 
@@ -847,8 +876,33 @@ function renderCrew(items){
   // hide it if Dani removed the whole party
   const alive = c && (!Store.ready || items.some(i => i.party_id === c.party_id));
   $("#crewBar").hidden = !alive;
-  if (alive) $("#crewTxt").textContent = `You RSVP'd with ${listNames(c.names)}.`;
+  if (!alive) return;
+  const gift = c.status === "gift";
+  $("#crewTxt").textContent = gift ? `You sent love as ${listNames(c.names)}.` : `You RSVP'd with ${listNames(c.names)}.`;
+  $("#crewBtn").hidden = gift;
+  $("#noteBtn").hidden = !Store.notesReady;
+  // "From" choices: this phone's party, as saved on the list
+  const sel = $("#noteFrom"), keep = sel.value;
+  sel.innerHTML = "";
+  items.filter(i => i.party_id === c.party_id).forEach(i => { const o = document.createElement("option"); o.value = i.id; o.textContent = i.name; sel.append(o); });
+  if (keep) sel.value = keep;
 }
+$("#noteBtn").addEventListener("click", () => { $("#noteForm").hidden = false; $("#noteMsg").textContent = ""; $("#noteText").focus(); });
+$("#noteCancel").addEventListener("click", () => { $("#noteForm").hidden = true; $("#noteText").value = ""; });
+$("#noteForm").addEventListener("submit", async e => {
+  e.preventDefault();
+  const text = $("#noteText").value.trim().slice(0, 140), msg = $("#noteMsg"), btn = $("#noteSend");
+  if (!text) { msg.className = "msg err"; msg.textContent = "Write something first."; $("#noteText").focus(); return; }
+  if (!$("#noteFrom").value) { msg.className = "msg err"; msg.textContent = "We couldn't find your RSVP. Refresh and try again."; return; }
+  btn.disabled = true; msg.className = "msg"; msg.textContent = "Posting…";
+  try {
+    await Store.addNote({ rsvp_id: $("#noteFrom").value, note: text });
+    $("#noteText").value = ""; $("#noteForm").hidden = true;
+    msg.className = "msg ok"; msg.textContent = "";
+    $("#crewTxt").textContent = "Note posted. Bri's gonna love it.";
+  } catch (err) { msg.className = "msg err"; msg.textContent = "That didn't post. Try again, or text Dani."; }
+  finally { btn.disabled = false; }
+});
 function pickCrew(){
   const c = loadCrew(); if (!c) return;
   addTo = c;
@@ -894,7 +948,7 @@ $("#rsvp").addEventListener("submit", async e => {
     await Store.add(rows);
     msg.className = "msg ok";
     const payers = rows.filter(r => r.guests).length;
-    if (chosen !== "gift") {
+    {
       const names = rows.map(r => r.name.split(/\s+/)[0]);
       saveCrew(addTo ? { ...addTo, names: [...addTo.names, ...names] } : { party_id: party, status: chosen, names });
       if (addTo) addTo = loadCrew();

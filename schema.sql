@@ -84,3 +84,31 @@ alter table public.bri21_rsvps add constraint bri21_rsvps_heads_check check (
 create index if not exists bri21_rsvps_party_idx on public.bri21_rsvps (party_id);
 grant insert (age, party_id) on public.bri21_rsvps to anon;
 grant select (party_id) on public.bri21_rsvps to anon;
+
+-- ============================================================
+-- NOTES FOR BRI (Oct 2026). People can add notes after they RSVP.
+-- Add-only for the public (no edits or deletes). Dani can read and remove.
+-- Notes disappear automatically if the person's RSVP is removed. Safe to re-run.
+-- ============================================================
+create table if not exists public.bri21_notes (
+  id uuid primary key default gen_random_uuid(),
+  rsvp_id uuid not null references public.bri21_rsvps(id) on delete cascade,
+  note text not null check (char_length(note) between 1 and 140),
+  created_at timestamptz not null default now()
+);
+create index if not exists bri21_notes_rsvp_idx on public.bri21_notes (rsvp_id);
+alter table public.bri21_notes enable row level security;
+revoke all on public.bri21_notes from anon, authenticated;
+grant select (id, rsvp_id, note, created_at) on public.bri21_notes to anon;
+grant insert (rsvp_id, note) on public.bri21_notes to anon;
+grant select, delete on public.bri21_notes to authenticated;
+drop policy if exists "bri21 notes read"         on public.bri21_notes;
+drop policy if exists "bri21 notes add"          on public.bri21_notes;
+drop policy if exists "bri21 notes admin read"   on public.bri21_notes;
+drop policy if exists "bri21 notes admin delete" on public.bri21_notes;
+create policy "bri21 notes read" on public.bri21_notes for select to anon using (true);
+create policy "bri21 notes add"  on public.bri21_notes for insert to anon with check (true);
+create policy "bri21 notes admin read" on public.bri21_notes for select to authenticated
+  using (lower(auth.jwt()->>'email') = 'danielle.washington21@gmail.com');
+create policy "bri21 notes admin delete" on public.bri21_notes for delete to authenticated
+  using (lower(auth.jwt()->>'email') = 'danielle.washington21@gmail.com');
