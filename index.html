@@ -104,6 +104,10 @@ h2.sec .neon{display:block}
 .spots .bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,#FF2E96,#FF8FCD);transition:width .5s}
 .spots p{margin:0;font-size:14px;color:#C2B6BF}
 .spots p strong{color:#fff}
+.crew{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;margin-top:14px;padding:12px 14px;background:#fff;border:1.5px dashed #E0156F;border-radius:14px;font-size:14.5px;color:var(--dark-ink)}
+.crew[hidden]{display:none}
+.crew button,.msg .crewlink{font:700 14px/1.2 var(--body);background:#2B1A24;color:#fff;border:0;border-radius:10px;padding:10px 14px;cursor:pointer}
+.msg .crewlink{display:inline-block;margin-top:8px;background:none;color:#A0145C;padding:0;text-decoration:underline}
 .how .hold{background:#FFD3EA;border-radius:10px;padding:10px 12px;font-weight:600;color:#A0145C}
 .signs{list-style:none;margin:0;padding:0;display:grid;gap:10px;justify-items:end;position:relative}
 .signs::before{content:"";position:absolute;right:46%;top:-20px;bottom:-30px;width:6px;background:linear-gradient(#3a2431,#1b0f17);border-radius:3px;z-index:0}
@@ -542,6 +546,10 @@ footer .logo{display:block;font-size:44px;margin-bottom:6px}
         <div class="bar"><i id="spotsFill"></i></div>
         <p id="spotsSub"></p>
       </div>
+      <div class="crew" id="crewBar" hidden>
+        <span id="crewTxt"></span>
+        <button type="button" id="crewBtn">Forgot somebody? Add them to your crew</button>
+      </div>
       <div class="choices" role="group" aria-label="Where's your head at?">
         <button class="choice c1" type="button" data-status="pending" aria-pressed="false">I'm coming</button>
         <button class="choice c2" type="button" data-status="thinking" aria-pressed="false">I'm interested</button>
@@ -753,6 +761,7 @@ function render(){
     });
 
   renderSpots(items);
+  renderCrew(items);
   const notice = $("#modeNotice");
   notice.hidden = Store.ready;
   if (!Store.ready) notice.textContent = "The list isn't connected yet. Text Dani to get added.";
@@ -789,6 +798,7 @@ const COPY = {
 };
 let chosen = "pending";
 function pick(status, focus){
+  if (addTo) { addTo = null; resetPeople(); }
   chosen = COPY[status] ? status : "pending";
   document.querySelectorAll(".choice").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.status === chosen)));
   $("#formH").textContent = COPY[chosen][0];
@@ -802,7 +812,8 @@ function pick(status, focus){
 }
 /* people rows */
 const MAX_PEOPLE = 12;
-function personRow(first){
+let addTo = null;   // set when adding people to an existing party ("Forgot somebody?")
+function personRow(first, keep){
   const d = document.createElement("div"); d.className = "prow";
   const n = document.createElement("input"); n.maxLength = 60; n.autocomplete = first ? "name" : "off";
   n.placeholder = first ? "Your name" : "Their name"; n.setAttribute("aria-label", first ? "Your name" : "Name");
@@ -810,6 +821,7 @@ function personRow(first){
   a.placeholder = "Age"; a.setAttribute("aria-label", first ? "Your age" : "Their age");
   d.append(n, a);
   if (first) { const y = document.createElement("span"); y.className = "you"; y.textContent = "You"; d.append(y); }
+  else if (keep) d.append(document.createElement("span"));
   else {
     const x = document.createElement("button"); x.type = "button"; x.className = "rm"; x.textContent = "×"; x.setAttribute("aria-label", "Remove this person");
     x.addEventListener("click", () => { d.remove(); syncAdd(); $("#peopleRows .prow:last-child input").focus(); });
@@ -818,10 +830,38 @@ function personRow(first){
   return d;
 }
 function syncAdd(){ $("#addPerson").hidden = $("#peopleRows").children.length >= MAX_PEOPLE; }
-function resetPeople(){ $("#peopleRows").innerHTML = ""; $("#peopleRows").append(personRow(true)); syncAdd(); }
+function resetPeople(){ $("#peopleRows").innerHTML = ""; $("#peopleRows").append(addTo ? personRow(false, true) : personRow(true)); syncAdd(); }
 $("#addPerson").addEventListener("click", () => { const r = personRow(false); $("#peopleRows").append(r); syncAdd(); r.querySelector("input").focus(); });
 resetPeople();
 const newId = () => (crypto.randomUUID ? crypto.randomUUID() : "10000000-1000-4000-8000-100000000000".replace(/[018]/g, c => (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)));
+
+/* "Forgot somebody?": this phone remembers its party so people can be added to it later */
+const CREW_KEY = "bri21_crew";
+const loadCrew = () => { try { return JSON.parse(localStorage.getItem(CREW_KEY)) || null; } catch (e) { return null; } };
+const saveCrew = c => { try { localStorage.setItem(CREW_KEY, JSON.stringify(c)); } catch (e) {} };
+const listNames = a => a.length <= 2 ? a.join(" and ") : `${a.slice(0, 2).join(", ")} + ${a.length - 2} more`;
+function renderCrew(items){
+  const c = loadCrew();
+  // hide it if Dani removed the whole party
+  const alive = c && (!Store.ready || items.some(i => i.party_id === c.party_id));
+  $("#crewBar").hidden = !alive;
+  if (alive) $("#crewTxt").textContent = `You RSVP'd with ${listNames(c.names)}.`;
+}
+function pickCrew(){
+  const c = loadCrew(); if (!c) return;
+  addTo = c;
+  chosen = COPY[c.status] && c.status !== "gift" ? c.status : "pending";
+  document.querySelectorAll(".choice").forEach(b => b.setAttribute("aria-pressed", "false"));
+  $("#formH").textContent = "Who'd you forget?";
+  $("#formSub").textContent = `They'll join your crew (${listNames(c.names)}) as "${STATUS[chosen].label}". Add their name and age.`;
+  $("#formMsg").textContent = ""; $("#formMsg").className = "msg";
+  $("#people").hidden = false; $("#nameRow").hidden = true;
+  $("#sendBtn").textContent = "Add to my crew";
+  resetPeople();
+  $("#rsvp").hidden = false;
+  setTimeout(() => $("#peopleRows input").focus({ preventScroll: true }), 350);
+}
+$("#crewBtn").addEventListener("click", () => { pickCrew(); $("#rsvp").scrollIntoView({ behavior: "smooth", block: "start" }); });
 
 document.querySelectorAll(".choice").forEach(b => b.addEventListener("click", () => pick(b.dataset.status, true)));
 document.querySelectorAll("[data-pick]").forEach(a => a.addEventListener("click", () => pick(a.dataset.pick, true)));
@@ -829,7 +869,7 @@ document.querySelectorAll("[data-pick]").forEach(a => a.addEventListener("click"
 $("#rsvp").addEventListener("submit", async e => {
   e.preventDefault();
   const f = e.target, msg = $("#formMsg"), btn = $("#sendBtn");
-  const note = f.note.value.trim().slice(0, 140), party = newId();
+  const note = f.note.value.trim().slice(0, 140), party = addTo ? addTo.party_id : newId();
   let rows;
   if (chosen === "gift") {
     const name = f.name.value.trim();
@@ -852,7 +892,14 @@ $("#rsvp").addEventListener("submit", async e => {
     await Store.add(rows);
     msg.className = "msg ok";
     const payers = rows.filter(r => r.guests).length;
-    msg.textContent = chosen === "pending" ? (rows.length > 1 ? `You're on the list, all ${rows.length} of you.` : "You're on the list.") + (payers ? ` Now go send that deposit: ${money(CONFIG.housePerPerson * payers)}${payers > 1 ? ` for ${payers} people` : ""}. Only ${CONFIG.spots} spots, and the deposit is what holds yours.` : ` Your spot isn't held until Dani confirms it. Only ${CONFIG.spots} spots.`)
+    if (chosen !== "gift") {
+      const names = rows.map(r => r.name.split(/\s+/)[0]);
+      saveCrew(addTo ? { ...addTo, names: [...addTo.names, ...names] } : { party_id: party, status: chosen, names });
+      if (addTo) addTo = loadCrew();
+    }
+    const added = addTo ? `Added ${listNames(rows.map(r => r.name.split(/\s+/)[0]))} to your crew.` : null;
+    msg.textContent = added ? added + (chosen === "pending" && payers ? ` Their deposit: ${money(CONFIG.housePerPerson * payers)}${payers > 1 ? ` for ${payers} people` : ""}.` : "")
+      : chosen === "pending" ? (rows.length > 1 ? `You're on the list, all ${rows.length} of you.` : "You're on the list.") + (payers ? ` Now go send that deposit: ${money(CONFIG.housePerPerson * payers)}${payers > 1 ? ` for ${payers} people` : ""}. Only ${CONFIG.spots} spots, and the deposit is what holds yours.` : ` Your spot isn't held until Dani confirms it. Only ${CONFIG.spots} spots.`)
       : chosen === "gift" ? `Thank you! Send your gift to ${(CONFIG.pay.find(p => p.value.startsWith("$")) || { value: "Cash App" }).value} with "${CONFIG.giftMemo}" in the memo.`
       : rows.length > 1 ? `You're on the list, all ${rows.length} of you. We see you.` : "You're on the list. We see you.";
     if (PAY_URL && (chosen === "pending" || chosen === "gift")) {
@@ -860,7 +907,13 @@ $("#rsvp").addEventListener("submit", async e => {
       a.textContent = chosen === "gift" ? "Open Cash App" : "Pay on Cash App";
       msg.append(" ", a);
     }
-    f.reset(); resetPeople();
+    if (chosen !== "gift") {
+      const fb = document.createElement("button"); fb.type = "button"; fb.className = "crewlink";
+      fb.textContent = addTo ? "Forgot somebody else?" : "Forgot somebody? Add them to your crew";
+      fb.addEventListener("click", pickCrew);
+      msg.append(document.createElement("br"), fb);
+    }
+    f.reset(); resetPeople(); render();
   } catch (err) {
     msg.className = "msg err"; msg.textContent = "That didn't save. Check your connection and try again, or text Dani.";
   } finally { btn.disabled = false; }
