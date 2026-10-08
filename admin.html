@@ -473,10 +473,25 @@ function rowEl(r, m, behind){
 async function addPay(r, v){
   const who = wholeParty ? partyOf(r).filter(x => x.guests > 0 && x.status !== "gift") : [r];
   if (!who.length) { toast("Nobody 9 and up in this party to log a payment for.", true); return; }
-  const changes = who.map(x => ({ id: x.id, patch: { amount_paid: Math.round((x.amount_paid + v) * 100) / 100 }, before: { amount_paid: x.amount_paid } }));
+  const m = math();
+  // Money moves the status forward on its own (never backward): deposit in -> Locked in, full share in -> Paid in full.
+  // That's what makes the public "spots held" counter tick up.
+  const bump = (x, amt) => {
+    if (x.status === "gift" || x.guests < 1) return null;
+    if (amt >= m.share * x.guests - 0.5 && x.status !== "paid") return "paid";
+    if (amt >= CONFIG.housePerPerson * x.guests - 0.5 && ["thinking", "coins", "pending"].includes(x.status)) return "in";
+    return null;
+  };
+  const changes = who.map(x => {
+    const amt = Math.round((x.amount_paid + v) * 100) / 100, st = bump(x, amt);
+    return { id: x.id, patch: st ? { amount_paid: amt, status: st } : { amount_paid: amt },
+             before: st ? { amount_paid: x.amount_paid, status: x.status } : { amount_paid: x.amount_paid } };
+  });
   if (changes.some(c => c.patch.amount_paid < 0)) { toast("That would put someone below $0.", true); return; }
-  await saveMany(changes, who.length > 1 ? `${money(v)} each logged for ${who.length} people · ${money(v * who.length)} total`
-    : `${money(v)} logged for ${r.name} · ${money(changes[0].patch.amount_paid)} total`);
+  const moved = changes.filter(c => c.patch.status);
+  const stTxt = moved.length ? ` · ${moved.length > 1 ? moved.length + " now " : "now "}${STATUS[moved[0].patch.status]}` : "";
+  await saveMany(changes, (who.length > 1 ? `${money(v)} each logged for ${who.length} people · ${money(v * who.length)} total`
+    : `${money(v)} logged for ${r.name} · ${money(changes[0].patch.amount_paid)} total`) + stTxt);
 }
 
 /* ---------- toast + undo ---------- */
