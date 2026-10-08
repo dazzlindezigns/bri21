@@ -34,6 +34,9 @@ header{display:flex;align-items:center;justify-content:space-between;gap:12px;pa
 .logo{font-family:var(--display);text-transform:uppercase;font-size:24px;letter-spacing:.02em;color:#FFD3EA;text-shadow:0 0 6px rgba(255,62,165,.9),0 0 18px rgba(255,62,165,.5)}
 .logo small{display:block;font-family:var(--body);font-size:12px;letter-spacing:.12em;color:var(--muted);text-shadow:none}
 .ghost{background:none;border:1.5px solid var(--line);border-radius:999px;padding:7px 14px;font-size:14px;color:var(--muted)}
+a.logo{text-decoration:none}
+a.ghost{text-decoration:none;display:inline-block}
+.hbtns{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
 
 .card{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:18px;margin-top:14px}
 h1,h2{font-family:var(--display);font-weight:400;text-transform:uppercase;margin:0;letter-spacing:.01em}
@@ -126,8 +129,11 @@ h2{font-size:20px}
 <body>
 <div class="wrap">
   <header>
-    <div class="logo">Bri's 21<small>PAYMENT LOG</small></div>
-    <button class="ghost" id="outBtn" type="button" hidden>Sign out</button>
+    <a class="logo" href="/" title="Go to the main site">Bri's 21<small>PAYMENT LOG</small></a>
+    <div class="hbtns">
+      <a class="ghost" href="/">← Main site</a>
+      <button class="ghost" id="outBtn" type="button" hidden>Sign out</button>
+    </div>
   </header>
 
   <!-- signed out -->
